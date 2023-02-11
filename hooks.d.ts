@@ -1,12 +1,16 @@
-type ITranslatesPageType = {
-    [key: string]: any;
+type ITranslationsPageType = {
+  [key: string]: any;
 };
-declare let translatesPage: ITranslatesPageType | null;
-declare const initializeTranslates: (translates: ITranslatesPageType) => void;
-declare const useTranslation: (namespace: string) => {
-    t: (slug: any) => string;
-    translatesPage?: undefined;
-} | {
-    t: (slug?: string) => string | ITranslatesPageType;
-    translatesPage: ITranslatesPageType;
-};
+declare let translationsPage: ITranslationsPageType | null;
+declare const initializeTranslations: (
+  translations: ITranslationsPageType
+) => void;
+declare const useTranslation: (namespace: string) =>
+  | {
+      t: (slug: any) => string;
+      translationsPage?: undefined;
+    }
+  | {
+      t: (slug?: string) => string | ITranslationsPageType;
+      translationsPage: ITranslationsPageType;
+    };

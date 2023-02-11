@@ -1,15 +1,15 @@
-type ITranslatesPageType = {
+type ITranslationsPageType = {
   [key: string]: any;
 };
 
-let translatesPage: ITranslatesPageType | null = null;
+let translationsPage: ITranslationsPageType | null = null;
 
-const initializeTranslates = (translates: ITranslatesPageType) => {
-  translatesPage = translates;
+const initializeTranslations = (translations: ITranslationsPageType) => {
+  translationsPage = translations;
 };
 
 const useTranslation = (namespace: string) => {
-  if (!translatesPage) {
+  if (!translationsPage) {
     return {
       t: (slug) => {
         return `${namespace}: ${slug}`;
@@ -17,21 +17,21 @@ const useTranslation = (namespace: string) => {
     };
   }
 
-  const translatesNamespace: ITranslatesPageType | undefined =
-    translatesPage[namespace];
+  const translationsNamespace: ITranslationsPageType | undefined =
+    translationsPage[namespace];
 
   const t = (slug = "") => {
-    if (!translatesNamespace) {
+    if (!translationsNamespace) {
       console.log(`Fail translate ${namespace}: ${slug}`);
       return `${namespace}: ${slug}`;
     }
 
     const splitPath = slug.split(".");
-    let pathTranslated: ITranslatesPageType | null = null;
+    let pathTranslated: ITranslationsPageType | null = null;
     for (const path of splitPath) {
-      const tryTranslate: ITranslatesPageType = pathTranslated
+      const tryTranslate: ITranslationsPageType = pathTranslated
         ? pathTranslated[path]
-        : translatesNamespace[path];
+        : translationsNamespace[path];
 
       if (tryTranslate !== undefined) {
         pathTranslated = tryTranslate;
@@ -46,9 +46,9 @@ const useTranslation = (namespace: string) => {
 
   return {
     t,
-    translatesPage,
+    translationsPage,
   };
 };
 
-export {initializeTranslates, translatesPage, useTranslation};
-// module.exports = {initializeTranslates, translatesPage, useTranslation};
+export {initializeTranslations, translationsPage, useTranslation};
+// module.exports = {initializeTranslations, translationsPage, useTranslation};

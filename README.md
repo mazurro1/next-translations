@@ -2,31 +2,31 @@
 
 Thanks to this package you will be able to add to your website written in **NextJS** to **download/manage** translations on your website! Thanks to this package you will be able to build a very efficient website that will have generated **pages WITH nested translations!**
 
-#### translates.config.js - you need to add this config file to your project
+#### translations.config.js - you need to add this config file to your project
 
-| Parameter                     | Type                                              | Default             | Description                                                                                                                                                                                                                                                                                                                                                                                 |
-| :---------------------------- | :------------------------------------------------ | :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `defaultLocale`               | `string`                                          | `'en'`              | **Required**. The default language on your site                                                                                                                                                                                                                                                                                                                                             |
-| `locales`                     | `string[]`                                        | `['en']`            | **Required**. All available languages on your website.                                                                                                                                                                                                                                                                                                                                      |
-| `outputFolderTranslates`      | `string`                                          | `'/public/locales'` | The path to your translations. **NOTE**: If you download translations using next-translations, they will be saved to the given address. For the site to work properly, they **must be** in the `/public` folder.                                                                                                                                                                            |
-| `nameFolderMultirouting`      | `string`                                          | `'locale'`          | The name of the folder in the `/public/[locales]` folder. This is useful when we want to have routing by languages that are given in: **locales**                                                                                                                                                                                                                                           |
-| `languageWithoutMultirouting` | `string`                                          | `undefined`         | The language to be excluded from multi routing. For example, we want /index.js to have the language **"pl" by default**, then it should be substituted into this variable. Other languages (if any) will be available in `/pages/[locale]`                                                                                                                                                  |
-| `constNamespaces`             | `string[]`                                        | `['common']`        | These are all the namespaces we use throughout the project so as not to define them on every page.                                                                                                                                                                                                                                                                                          |
-| `namespaces`                  | `string[]`                                        | `['common']`        | All the namespaces we use in our repository.                                                                                                                                                                                                                                                                                                                                                |
-| `linkFetchTranslates`         | `(language: string, namespace: string) => string` | `undefined`         | A function to download our translations **from the api**. It is called every time it wants to load a given translation in a given language and namespace. The function returns single values that we entered in the fields: `locales`, `namespaces`. To return, we need to return a link to our api, e.g. **return** `https://your-api-to-download-translates/dev/${language}/${namespace}` |
+| Parameter                     | Type                                              | Default             | Description                                                                                                                                                                                                                                                                                                                                                                                   |
+| :---------------------------- | :------------------------------------------------ | :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultLocale`               | `string`                                          | `'en'`              | **Required**. The default language on your site                                                                                                                                                                                                                                                                                                                                               |
+| `locales`                     | `string[]`                                        | `['en']`            | **Required**. All available languages on your website.                                                                                                                                                                                                                                                                                                                                        |
+| `outputFolderTranslations`    | `string`                                          | `'/public/locales'` | The path to your translations. **NOTE**: If you download translations using next-translations, they will be saved to the given address. For the site to work properly, they **must be** in the `/public` folder.                                                                                                                                                                              |
+| `nameFolderMultirouting`      | `string`                                          | `'locale'`          | The name of the folder in the `/public/[locales]` folder. This is useful when we want to have routing by languages that are given in: **locales**                                                                                                                                                                                                                                             |
+| `languageWithoutMultirouting` | `string`                                          | `undefined`         | The language to be excluded from multi routing. For example, we want /index.js to have the language **"pl" by default**, then it should be substituted into this variable. Other languages (if any) will be available in `/pages/[locale]`                                                                                                                                                    |
+| `constNamespaces`             | `string[]`                                        | `['common']`        | These are all the namespaces we use throughout the project so as not to define them on every page.                                                                                                                                                                                                                                                                                            |
+| `namespaces`                  | `string[]`                                        | `['common']`        | All the namespaces we use in our repository.                                                                                                                                                                                                                                                                                                                                                  |
+| `linkFetchTranslations`       | `(language: string, namespace: string) => string` | `undefined`         | A function to download our translations **from the api**. It is called every time it wants to load a given translation in a given language and namespace. The function returns single values that we entered in the fields: `locales`, `namespaces`. To return, we need to return a link to our api, e.g. **return** `https://your-api-to-download-translations/dev/${language}/${namespace}` |
 
 ## configuration
 
 **/pages/\_app.tsx**
 
 ```bash
-import { initializeTranslates } from "next-translations/hooks";
+import { initializeTranslations } from "next-translations/hooks";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
 
   // add this line
-  initializeTranslates(pageProps?.translates);
+  initializeTranslations(pageProps?.translations);
 
   return (
     <main>
@@ -39,16 +39,16 @@ export default function App({ Component, pageProps }: AppProps) {
 **/pages/yourPath.tsx**
 
 ```bash
-import { getTranslatesProps } from "next-translations";
+import { getTranslationsProps } from "next-translations";
 import { useTranslation } from "next-translations/hooks";
 import { GetStaticProps } from "next";
 
 function Home() {
-  const { t, translatesPage } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, translationsPage } = useTranslation("common"); // enter the given namespace that you use in the given section
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
-  // translatesPage -> all transactions that are available on this subpage
+  // translationsPage -> all transactions that are available on this subpage
 
   return (
     <div>
@@ -58,11 +58,11 @@ function Home() {
 }
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const translatesProps = await getTranslatesProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+  const translationsProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
 
   return {
     props: {
-      ...translatesProps,
+      ...translationsProps,
     },
   };
 }
@@ -75,16 +75,16 @@ export default Home;
 **/pages/[locale]/yourPath.tsx**
 
 ```bash
-import { getTranslatesProps, getStaticPaths } from "next-translations";
+import { getTranslationsProps, getStaticPaths } from "next-translations";
 import { useTranslation } from "next-translations/hooks";
 import { GetStaticProps } from "next";
 
 function Home() {
-  const { t, translatesPage } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, translationsPage } = useTranslation("common"); // enter the given namespace that you use in the given section
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
-  // translatesPage -> all transactions that are available on this subpage
+  // translationsPage -> all transactions that are available on this subpage
 
   return (
     <div>
@@ -94,11 +94,11 @@ function Home() {
 }
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const translatesProps = await getTranslatesProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+  const translationsProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
 
   return {
     props: {
-      ...translatesProps,
+      ...translationsProps,
     },
   };
 }

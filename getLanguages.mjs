@@ -1,49 +1,52 @@
 import fse from "fs-extra";
 import fetch from "node-fetch";
-import translatesConfigUser from "../../translates.config.js";
+import translationsConfigUser from "../../translations.config.js";
 
-const translatesConfig = {
-  defaultLocale: translatesConfigUser?.defaultLocale || "pl",
-  locales: translatesConfigUser?.locales || ["en"],
-  linkFetchTranslates: translatesConfigUser?.linkFetchTranslates,
-  outputFolderTranslates:
-    translatesConfigUser?.outputFolderTranslates || "/public/locales",
+const translationsConfig = {
+  defaultLocale: translationsConfigUser?.defaultLocale || "pl",
+  locales: translationsConfigUser?.locales || ["en"],
+  linkFetchTranslations: translationsConfigUser?.linkFetchTranslations,
+  outputFolderTranslations:
+    translationsConfigUser?.outputFolderTranslations || "/public/locales",
   nameFolderMultirouting:
-    translatesConfigUser?.nameFolderMultirouting || "locale",
+    translationsConfigUser?.nameFolderMultirouting || "locale",
   languageWithoutMultirouting:
-    translatesConfigUser?.languageWithoutMultirouting || undefined,
-  constNamespaces: translatesConfigUser?.constNamespaces || ["common"],
-  namespaces: translatesConfigUser?.namespaces || ["common"],
+    translationsConfigUser?.languageWithoutMultirouting || undefined,
+  constNamespaces: translationsConfigUser?.constNamespaces || ["common"],
+  namespaces: translationsConfigUser?.namespaces || ["common"],
 };
 
 const fetchLanguages = async (language, namespace) => {
-  if (!translatesConfig?.linkFetchTranslates) {
-    console.log("No detected link to download translates :(");
+  if (!translationsConfig?.linkFetchTranslations) {
+    console.log("No detected link to download translations :(");
     return;
   }
-  const linkToFetch = translatesConfig.linkFetchTranslates(language, namespace);
+  const linkToFetch = translationsConfig.linkFetchTranslations(
+    language,
+    namespace
+  );
   const result = await fetch(linkToFetch);
   return result.json();
 };
 
 export const downloadLanguages = async () => {
-  console.log("Fetching translates from api...");
+  console.log("Fetching translations from api...");
 
   try {
-    for (const lang of translatesConfig.locales) {
+    for (const lang of translationsConfig.locales) {
       const validLanguage = lang === "ua" ? "uk" : lang;
 
-      for (const namespace of translatesConfig.namespaces) {
+      for (const namespace of translationsConfig.namespaces) {
         const data = await fetchLanguages(validLanguage, namespace);
         if (data) {
           await fse.outputFile(
-            `.${translatesConfig.outputFolderTranslates}/${lang}/${namespace}.json`,
+            `.${translationsConfig.outputFolderTranslations}/${lang}/${namespace}.json`,
             JSON.stringify(data)
           );
         }
       }
     }
-    console.log("Fetching translates success!!!");
+    console.log("Fetching translations success!!!");
     return 0;
   } catch (err) {
     console.error(err);

@@ -1,64 +1,64 @@
 import fse from "fs-extra";
 import path from "path";
 //@ts-ignore
-import translatesConfigUser from "../../translates.config.js";
+import translationsConfigUser from "../../translations.config.js";
 // const fse = require("fs-extra");
 // const path = require("path");
-// const translatesConfigUser = require("../../translates.config.js");
+// const translationsConfigUser = require("../../translations.config.js");
 
-const translatesConfig = {
-  defaultLocale: translatesConfigUser?.defaultLocale || "pl",
-  locales: translatesConfigUser?.locales || ["en"],
-  linkFetchTranslates: translatesConfigUser?.linkFetchTranslates,
-  outputFolderTranslates:
-    translatesConfigUser?.outputFolderTranslates || "/public/locales",
+const translationsConfig = {
+  defaultLocale: translationsConfigUser?.defaultLocale || "pl",
+  locales: translationsConfigUser?.locales || ["en"],
+  linkFetchTranslations: translationsConfigUser?.linkFetchTranslations,
+  outputFolderTranslations:
+    translationsConfigUser?.outputFolderTranslations || "/public/locales",
   nameFolderMultirouting:
-    translatesConfigUser?.nameFolderMultirouting || "locale",
+    translationsConfigUser?.nameFolderMultirouting || "locale",
   languageWithoutMultirouting:
-    translatesConfigUser?.languageWithoutMultirouting || undefined,
-  constNamespaces: translatesConfigUser?.constNamespaces || ["common"],
-  namespaces: translatesConfigUser?.namespaces || ["common"],
+    translationsConfigUser?.languageWithoutMultirouting || undefined,
+  constNamespaces: translationsConfigUser?.constNamespaces || ["common"],
+  namespaces: translationsConfigUser?.namespaces || ["common"],
 };
 
-const allTranslatesLanguages = translatesConfig.locales;
+const allTranslationsLanguages = translationsConfig.locales;
 
-const getTranslatesFromFiles = async (
-  locale: string = translatesConfig.defaultLocale,
+const getTranslationsFromFiles = async (
+  locale: string = translationsConfig.defaultLocale,
   ns: string[] = []
 ) => {
-  let translates = {};
+  let translations = {};
   try {
     for (const namespace of ns) {
-      const folderPath = `../..${translatesConfig.outputFolderTranslates}/${locale}/${namespace}.json`;
+      const folderPath = `../..${translationsConfig.outputFolderTranslations}/${locale}/${namespace}.json`;
 
       const exists = await fse.pathExists(path.resolve(__dirname, folderPath));
 
       if (exists) {
-        const translatesJson = await fse.readJson(
+        const translationsJson = await fse.readJson(
           path.resolve(__dirname, folderPath)
         );
-        if (translatesJson) {
-          translates = {...translates, [namespace]: translatesJson};
+        if (translationsJson) {
+          translations = {...translations, [namespace]: translationsJson};
         }
       } else {
         console.error("Path not found!!!");
       }
     }
-    return {translates: translates};
+    return {translations: translations};
   } catch (err) {
     console.error(err);
   }
 };
 
-async function getTranslatesProps(ctx: any, ns: string[] = []) {
-  let locale: string = translatesConfig.defaultLocale;
+async function getTranslationsProps(ctx: any, ns: string[] = []) {
+  let locale: string = translationsConfig.defaultLocale;
   if (ctx?.params?.locale) {
     locale = ctx.params.locale;
   }
-  const defaultNamespacesToUseInAllPages = translatesConfig.constNamespaces;
+  const defaultNamespacesToUseInAllPages = translationsConfig.constNamespaces;
 
   const props = {
-    ...(await getTranslatesFromFiles(locale, [
+    ...(await getTranslationsFromFiles(locale, [
       ...ns,
       ...defaultNamespacesToUseInAllPages,
     ])),
@@ -67,8 +67,8 @@ async function getTranslatesProps(ctx: any, ns: string[] = []) {
 }
 
 const getPaths = () => {
-  return (allTranslatesLanguages as string[])
-    .filter((item) => item !== translatesConfig.languageWithoutMultirouting)
+  return (allTranslationsLanguages as string[])
+    .filter((item) => item !== translationsConfig.languageWithoutMultirouting)
     .map((lng) => ({
       params: {
         locale: lng,
@@ -84,9 +84,14 @@ const getStaticPaths = () => {
 };
 
 // module.exports = {
-//   allTranslatesLanguages,
-//   getTranslatesProps,
+//   allTranslationsLanguages,
+//   getTranslationsProps,
 //   getPaths,
 //   getStaticPaths,
 // };
-export {allTranslatesLanguages, getTranslatesProps, getPaths, getStaticPaths};
+export {
+  allTranslationsLanguages,
+  getTranslationsProps,
+  getPaths,
+  getStaticPaths,
+};
