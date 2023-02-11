@@ -1,6 +1,6 @@
 {
   "name": "next-translations",
-  "version": "2.1.7",
+  "version": "2.1.9",
   "description": "Translations to NextJS app",
   "main": "index.js",
   "scripts": {
