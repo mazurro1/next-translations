@@ -22,26 +22,26 @@ const useTranslation = (namespace: string) => {
 
   const t = (slug = "") => {
     if (!translationsNamespace) {
-      console.log(`Fail translate ${namespace}: ${slug}`);
+      console.log(`Fail translation ${namespace}: ${slug}`);
       return `${namespace}: ${slug}`;
     }
 
     const splitPath = slug.split(".");
-    let pathTranslated: ITranslationsPageType | null = null;
+    let pathTranslationd: ITranslationsPageType | null = null;
     for (const path of splitPath) {
-      const tryTranslate: ITranslationsPageType = pathTranslated
-        ? pathTranslated[path]
+      const tryTranslation: ITranslationsPageType = pathTranslationd
+        ? pathTranslationd[path]
         : translationsNamespace[path];
 
-      if (tryTranslate !== undefined) {
-        pathTranslated = tryTranslate;
+      if (tryTranslation !== undefined) {
+        pathTranslationd = tryTranslation;
       } else {
-        console.log(`Fail translate ${namespace}: ${slug}`);
+        console.log(`Fail translation ${namespace}: ${slug}`);
         return `${namespace}: ${slug}`;
       }
     }
 
-    return pathTranslated;
+    return pathTranslationd;
   };
 
   return {
