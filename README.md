@@ -44,11 +44,11 @@ import { useTranslation } from "next-translations/hooks";
 import { GetStaticProps } from "next";
 
 function Home() {
-  const { t, translationsPage } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
-  // translationsPage -> all transactions that are available on this subpage
+  // pageTranslations -> all transactions that are available on this subpage
 
   return (
     <div>
@@ -80,11 +80,11 @@ import { useTranslation } from "next-translations/hooks";
 import { GetStaticProps } from "next";
 
 function Home() {
-  const { t, translationsPage } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
-  // translationsPage -> all transactions that are available on this subpage
+  // pageTranslations -> all transactions that are available on this subpage
 
   return (
     <div>

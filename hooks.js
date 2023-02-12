@@ -1,16 +1,16 @@
-var translationsPage = null;
+var pageTranslations = null;
 var initializeTranslations = function (translations) {
-  translationsPage = translations;
+  pageTranslations = translations;
 };
 var useTranslation = function (namespace) {
-  if (!translationsPage) {
+  if (!pageTranslations) {
     return {
       t: function (slug) {
         return "".concat(namespace, ": ").concat(slug);
       },
     };
   }
-  var translationsNamespace = translationsPage[namespace];
+  var translationsNamespace = pageTranslations[namespace];
   var t = function (slug) {
     if (slug === void 0) {
       slug = "";
@@ -37,11 +37,11 @@ var useTranslation = function (namespace) {
   };
   return {
     t: t,
-    translationsPage: translationsPage,
+    pageTranslations: pageTranslations,
   };
 };
 module.exports = {
   initializeTranslations: initializeTranslations,
-  translationsPage: translationsPage,
+  pageTranslations: pageTranslations,
   useTranslation: useTranslation,
 };

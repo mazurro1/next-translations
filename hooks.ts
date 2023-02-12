@@ -1,15 +1,15 @@
-type ITranslationsPageType = {
+type IpageTranslationsType = {
   [key: string]: any;
 };
 
-let translationsPage: ITranslationsPageType | null = null;
+let pageTranslations: IpageTranslationsType | null = null;
 
-const initializeTranslations = (translations: ITranslationsPageType) => {
-  translationsPage = translations;
+const initializeTranslations = (translations: IpageTranslationsType) => {
+  pageTranslations = translations;
 };
 
 const useTranslation = (namespace: string) => {
-  if (!translationsPage) {
+  if (!pageTranslations) {
     return {
       t: (slug) => {
         return `${namespace}: ${slug}`;
@@ -17,8 +17,8 @@ const useTranslation = (namespace: string) => {
     };
   }
 
-  const translationsNamespace: ITranslationsPageType | undefined =
-    translationsPage[namespace];
+  const translationsNamespace: IpageTranslationsType | undefined =
+    pageTranslations[namespace];
 
   const t = (slug = "") => {
     if (!translationsNamespace) {
@@ -27,9 +27,9 @@ const useTranslation = (namespace: string) => {
     }
 
     const splitPath = slug.split(".");
-    let pathTranslationd: ITranslationsPageType | null = null;
+    let pathTranslationd: IpageTranslationsType | null = null;
     for (const path of splitPath) {
-      const tryTranslation: ITranslationsPageType = pathTranslationd
+      const tryTranslation: IpageTranslationsType = pathTranslationd
         ? pathTranslationd[path]
         : translationsNamespace[path];
 
@@ -46,9 +46,9 @@ const useTranslation = (namespace: string) => {
 
   return {
     t,
-    translationsPage,
+    pageTranslations,
   };
 };
 
-export {initializeTranslations, translationsPage, useTranslation};
-// module.exports = {initializeTranslations, translationsPage, useTranslation};
+export {initializeTranslations, pageTranslations, useTranslation};
+// module.exports = {initializeTranslations, pageTranslations, useTranslation};

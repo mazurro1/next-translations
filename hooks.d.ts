@@ -1,16 +1,16 @@
-type ITranslationsPageType = {
+type IpageTranslationsType = {
   [key: string]: any;
 };
-declare let translationsPage: ITranslationsPageType | null;
+declare let pageTranslations: IpageTranslationsType | null;
 declare const initializeTranslations: (
-  translations: ITranslationsPageType
+  translations: IpageTranslationsType
 ) => void;
 declare const useTranslation: (namespace: string) =>
   | {
       t: (slug: any) => string;
-      translationsPage?: undefined;
+      pageTranslations?: undefined;
     }
   | {
-      t: (slug?: string) => string | ITranslationsPageType;
-      translationsPage: ITranslationsPageType;
+      t: (slug?: string) => string | IpageTranslationsType;
+      pageTranslations: IpageTranslationsType;
     };

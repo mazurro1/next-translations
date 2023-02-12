@@ -1,17 +1,45 @@
 {
   "name": "next-translations",
-  "email": "profronthm@gmail.com",
+  "author": {
+    "name": "Hubert Mazur",
+    "email": "profronthm@gmail.com"
+  },
+  "private": false,
   "bugs": {
     "email": "profronthm@gmail.com"
   },
-  "version": "2.2.3",
+  "keywords": [
+    "react",
+    "reactjs",
+    "react.js",
+    "i18n",
+    "nextjs",
+    "next.js",
+    "next",
+    "plugin",
+    "translate",
+    "translation",
+    "translations",
+    "internationalization",
+    "locale",
+    "locales",
+    "globalization",
+    "fetching",
+    "fetch",
+    "static",
+    "sites"
+  ],
+  "version": "2.3.0",
   "description": "Translations to NextJS app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Hubert Mazur",
-  "license": "ISC",
+  "license": "MIT",
+  "peerDependencies": {
+    "next": ">= 10.0.0",
+    "react": ">= 16.8.0"
+  },
   "dependencies": {
     "@types/fs-extra": "^11.0.1",
     "fs-extra": "^11.1.0",
@@ -19,6 +47,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mazurro1"
+    "url": "https://github.com/mazurro1/next-translations"
   }
 }
