@@ -114,7 +114,7 @@ export default Home;
 ```bash
 "scripts": {
     "getTranslations": "node node_modules/next-translations/getTranslations.mjs", // script to fetch all translations from your api ***linkFetchTranslations**
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run getLanguages && next dev",
+    "build": "npm run getLanguages && next build",
 }
 ```
