@@ -17,6 +17,16 @@ Thanks to this package you will be able to add to your website written in **Next
 
 ## configuration
 
+**example translations in /public/locales/en/common.json**
+
+```bash
+{
+  "section":{
+    "title": "Example title in your site!"
+  }
+}
+```
+
 **/pages/\_app.tsx**
 
 ```bash
