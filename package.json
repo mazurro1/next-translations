@@ -4,7 +4,7 @@
   "bugs": {
     "email": "profronthm@gmail.com"
   },
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Translations to NextJS app",
   "main": "index.js",
   "scripts": {
