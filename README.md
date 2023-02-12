@@ -108,3 +108,13 @@ export { getStaticPaths }; // IMPORTANT ADD THIS LINE TO ENABLE MULTI ROUTING
 export default Home;
 
 ```
+
+**package.json**
+
+```bash
+"scripts": {
+    "getTranslations": "node node_modules/next-translations/getTranslations.mjs", // script to fetch all translations from your api ***linkFetchTranslations**
+    "dev": "next dev",
+    "build": "next build",
+}
+```
