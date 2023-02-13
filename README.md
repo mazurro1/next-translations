@@ -142,6 +142,21 @@ tArray("section.text4"); // if there is a translation and it has a any[] type, i
 
 tObject("section.text5"); // if there is a translation and it has a object type, it returns it as object, if it doesn't find it, or it has the wrong type, it returns undefined.
 
+
+//if there is a translation and it has type string, if it doesn't find it or it has wrong type it returns undefined. If it contains <TComponent>value</TComponent> or <TComponent/>, you can create your own component based on the values returned from the callback
+tComponent(
+  "section.textLink",
+  ({ textBefore, textComponent, textAfter }) => { // value from callback to create your own component
+    return (
+      <div>
+        <p>{textBefore}</p>
+        <Link href="/">{textComponent}</Link>
+        <p>{textAfter}</p>
+      </div>
+    );
+  },
+);
+
 ```
 
 **package.json**
