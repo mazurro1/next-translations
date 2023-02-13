@@ -142,40 +142,58 @@ var useTranslation = function (namespace) {
         if (!generatedText) {
             return undefined;
         }
-        var componentIndex = -1;
+        var componentStartIndex = -1;
+        var componentEndIndex = -1;
+        var componentOnlyIndex = -1;
+        var text = "";
         var textBefore = "";
         var textAfter = "";
         var textComponent = undefined;
         var generatedTextArray = generatedText.split(" ");
         generatedTextArray.forEach(function (itemText, indexText) {
-            var hasStartComponent = itemText.includes("<" + translationsConfig.componentNameToReplaced + ">");
-            var hasEndComponent = itemText.includes("</" + translationsConfig.componentNameToReplaced + ">");
-            var isOnlyComponent = itemText.includes("<" + translationsConfig.componentNameToReplaced + "/>");
-            if ((hasStartComponent && hasEndComponent) || isOnlyComponent) {
-                componentIndex = indexText;
+            var isStartComponent = itemText === "<" + translationsConfig.componentNameToReplaced + ">";
+            if (isStartComponent) {
+                componentStartIndex = indexText;
+                return;
+            }
+            var isEndComponent = itemText === "</" + translationsConfig.componentNameToReplaced + ">";
+            if (isEndComponent) {
+                componentEndIndex = indexText;
+                return;
+            }
+            var isOnlyComponent = itemText === "<" + translationsConfig.componentNameToReplaced + "/>";
+            if (isOnlyComponent) {
+                componentOnlyIndex = indexText;
+                return;
             }
         });
-        if (componentIndex >= 0) {
-            generatedTextArray.forEach(function (itemText, indexText) {
-                if (indexText < componentIndex) {
+        generatedTextArray.forEach(function (itemText, indexText) {
+            if (componentOnlyIndex === -1 &&
+                componentStartIndex >= 0 &&
+                componentEndIndex >= 0) {
+                if (indexText < componentStartIndex) {
                     textBefore = "".concat(textBefore ? textBefore + " " : "").concat(itemText);
                 }
-                else if (indexText > componentIndex) {
+                else if (indexText > componentStartIndex &&
+                    indexText < componentEndIndex) {
+                    textComponent = "".concat(textComponent ? " " + textComponent : "").concat(itemText);
+                }
+                else if (indexText > componentEndIndex) {
                     textAfter = "".concat(textAfter ? " " + textAfter : "").concat(itemText);
                 }
-                else {
-                    var isOnlyComponent = itemText.includes("<" + translationsConfig.componentNameToReplaced + "/>");
-                    if (isOnlyComponent) {
-                        textComponent = undefined;
-                    }
-                    else {
-                        var sliceStartComponent = itemText.slice(translationsConfig.componentNameToReplaced.length + 2, itemText.length);
-                        var indexEndComponent = sliceStartComponent.lastIndexOf("</" + translationsConfig.componentNameToReplaced + ">");
-                        textComponent = sliceStartComponent.slice(0, indexEndComponent);
-                    }
+            }
+            else if (componentOnlyIndex >= 0) {
+                if (indexText < componentOnlyIndex) {
+                    textBefore = "".concat(textBefore ? textBefore + " " : "").concat(itemText);
                 }
-            });
-        }
+                else if (indexText > componentOnlyIndex) {
+                    textAfter = "".concat(textAfter ? " " + textAfter : "").concat(itemText);
+                }
+            }
+            else {
+                text = "".concat(text ? " " + text : "").concat(itemText);
+            }
+        });
         return callback({
             textBefore: textBefore,
             textComponent: textComponent,

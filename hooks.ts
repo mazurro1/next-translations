@@ -209,7 +209,11 @@ const useTranslation = (namespace: string) => {
       return undefined;
     }
 
-    let componentIndex: number = -1;
+    let componentStartIndex = -1;
+    let componentEndIndex = -1;
+    let componentOnlyIndex = -1;
+
+    let text = "";
     let textBefore = "";
     let textAfter = "";
     let textComponent: string | undefined = undefined;
@@ -217,45 +221,59 @@ const useTranslation = (namespace: string) => {
     const generatedTextArray = generatedText.split(" ");
 
     generatedTextArray.forEach((itemText, indexText) => {
-      const hasStartComponent = itemText.includes(
-        "<" + translationsConfig.componentNameToReplaced + ">"
-      );
-      const hasEndComponent = itemText.includes(
-        "</" + translationsConfig.componentNameToReplaced + ">"
-      );
-      const isOnlyComponent = itemText.includes(
-        "<" + translationsConfig.componentNameToReplaced + "/>"
-      );
-      if ((hasStartComponent && hasEndComponent) || isOnlyComponent) {
-        componentIndex = indexText;
+      const isStartComponent =
+        itemText === "<" + translationsConfig.componentNameToReplaced + ">";
+      if (isStartComponent) {
+        componentStartIndex = indexText;
+
+        return;
+      }
+
+      const isEndComponent =
+        itemText === "</" + translationsConfig.componentNameToReplaced + ">";
+      if (isEndComponent) {
+        componentEndIndex = indexText;
+
+        return;
+      }
+
+      const isOnlyComponent =
+        itemText === "<" + translationsConfig.componentNameToReplaced + "/>";
+      if (isOnlyComponent) {
+        componentOnlyIndex = indexText;
+        return;
       }
     });
 
-    if (componentIndex >= 0) {
-      generatedTextArray.forEach((itemText, indexText) => {
-        if (indexText < componentIndex) {
+    generatedTextArray.forEach((itemText, indexText) => {
+      if (
+        componentOnlyIndex === -1 &&
+        componentStartIndex >= 0 &&
+        componentEndIndex >= 0
+      ) {
+        if (indexText < componentStartIndex) {
           textBefore = `${textBefore ? textBefore + " " : ""}${itemText}`;
-        } else if (indexText > componentIndex) {
-          textAfter = `${textAfter ? " " + textAfter : ""}${itemText}`;
-        } else {
-          const isOnlyComponent = itemText.includes(
-            "<" + translationsConfig.componentNameToReplaced + "/>"
-          );
-          if (isOnlyComponent) {
-            textComponent = undefined;
-          } else {
-            const sliceStartComponent = itemText.slice(
-              translationsConfig.componentNameToReplaced.length + 2,
-              itemText.length
-            );
-            const indexEndComponent = sliceStartComponent.lastIndexOf(
-              "</" + translationsConfig.componentNameToReplaced + ">"
-            );
-            textComponent = sliceStartComponent.slice(0, indexEndComponent);
-          }
+        } else if (
+          indexText > componentStartIndex &&
+          indexText < componentEndIndex
+        ) {
+          textComponent = `${
+            textComponent ? textComponent + " " : ""
+          }${itemText}`;
+        } else if (indexText > componentEndIndex) {
+          textAfter = `${textAfter ? textAfter + " " : ""}${itemText}`;
         }
-      });
-    }
+      } else if (componentOnlyIndex >= 0) {
+        if (indexText < componentOnlyIndex) {
+          textBefore = `${textBefore ? textBefore + " " : ""}${itemText}`;
+        } else if (indexText > componentOnlyIndex) {
+          textAfter = `${textAfter ? textAfter + " " : ""}${itemText}`;
+        }
+      } else {
+        text = `${text ? text + " " : ""}${itemText}`;
+      }
+    });
+
     return callback({
       textBefore,
       textComponent,
