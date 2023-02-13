@@ -29,7 +29,7 @@
     "static",
     "sites"
   ],
-  "version": "2.3.6",
+  "version": "2.3.7",
   "description": "Translations to NextJS app",
   "main": "index.js",
   "scripts": {

@@ -1,35 +1,35 @@
-type IpageTranslationsType = {
+type IPageTranslationsType = {
   [key: string]: any;
 };
 
-let pageTranslations: IpageTranslationsType | null = null;
+let pageTranslations: IPageTranslationsType | null = null;
 
-const initializeTranslations = (translations: IpageTranslationsType) => {
+const initializeTranslations = (translations: IPageTranslationsType) => {
   pageTranslations = translations;
 };
 
 const useTranslation = (namespace: string) => {
   if (!pageTranslations) {
     return {
-      t: (slug) => {
+      t: (slug: string) => {
         return `${namespace}: ${slug}`;
       },
     };
   }
 
-  const translationsNamespace: IpageTranslationsType | undefined =
+  const translationsNamespace: IPageTranslationsType | undefined =
     pageTranslations[namespace];
 
-  const t = (slug = "") => {
+  const t = (slug = ""): any => {
     if (!translationsNamespace) {
       console.log(`Fail translation ${namespace}: ${slug}`);
       return `${namespace}: ${slug}`;
     }
 
     const splitPath = slug.split(".");
-    let pathTranslationd: IpageTranslationsType | null = null;
+    let pathTranslationd: IPageTranslationsType | null = null;
     for (const path of splitPath) {
-      const tryTranslation: IpageTranslationsType = pathTranslationd
+      const tryTranslation: IPageTranslationsType = pathTranslationd
         ? pathTranslationd[path]
         : translationsNamespace[path];
 
