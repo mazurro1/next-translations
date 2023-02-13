@@ -1,3 +1,12 @@
+//@ts-ignore
+import translationsConfigUser from "../../translations.config.js";
+// const translationsConfigUser = require("../../translations.config.js");
+
+const translationsConfig = {
+  componentNameToReplaced:
+    translationsConfigUser?.componentNameToReplaced || "TComponent",
+};
+
 type IPageTranslationsType = {
   [key: string]: any;
 };
@@ -118,6 +127,12 @@ const useTranslation = (namespace: string) => {
         );
         return undefined;
       },
+      tComponent: (slug: string) => {
+        console.log(
+          `next-translations - Fail translation ${namespace}: ${slug}`
+        );
+        return undefined;
+      },
     };
   }
 
@@ -169,12 +184,79 @@ const useTranslation = (namespace: string) => {
     );
   };
 
+  const tComponent = (slug: string = "", callback): any | undefined => {
+    const generatedText: string | undefined = generateTranslationWithType(
+      slug,
+      translationsNamespace,
+      namespace,
+      "string"
+    );
+
+    if (!generatedText) {
+      return undefined;
+    }
+
+    let componentIndex: number = -1;
+    let textBefore = "";
+    let textAfter = "";
+    let componentText: string | undefined = undefined;
+
+    const generatedTextArray = generatedText.split(" ");
+
+    generatedTextArray.forEach((itemText, indexText) => {
+      const hasStartComponent = itemText.includes(
+        "<" + translationsConfig.componentNameToReplaced + ">"
+      );
+      const hasEndComponent = itemText.includes(
+        "</" + translationsConfig.componentNameToReplaced + ">"
+      );
+      const isOnlyComponent = itemText.includes(
+        "<" + translationsConfig.componentNameToReplaced + "/>"
+      );
+      if ((hasStartComponent && hasEndComponent) || isOnlyComponent) {
+        componentIndex = indexText;
+      }
+    });
+
+    if (componentIndex >= 0) {
+      generatedTextArray.forEach((itemText, indexText) => {
+        if (indexText < componentIndex) {
+          textBefore = `${textBefore ? textBefore + " " : ""}${itemText}`;
+        } else if (indexText > componentIndex) {
+          textAfter = `${textAfter ? " " + textAfter : ""}${itemText}`;
+        } else {
+          const isOnlyComponent = itemText.includes(
+            "<" + translationsConfig.componentNameToReplaced + "/>"
+          );
+          if (isOnlyComponent) {
+            componentText = undefined;
+          } else {
+            const sliceStartComponent = itemText.slice(
+              0,
+              translationsConfig.componentNameToReplaced.length + 2
+            );
+            const indexEndComponent = sliceStartComponent.lastIndexOf(
+              "</" + translationsConfig.componentNameToReplaced + ">"
+            );
+            componentText = sliceStartComponent.slice(
+              indexEndComponent,
+              translationsConfig.componentNameToReplaced.length + 2
+            );
+          }
+        }
+      });
+    }
+
+    return callback({textBefore, children: componentText, textAfter});
+  };
+
   return {
     t,
     tString,
     tNumber,
     tArray,
     tObject,
+    tComponent,
     pageTranslations,
   };
 };

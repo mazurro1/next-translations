@@ -7,17 +7,13 @@ import translationsConfigUser from "../../translations.config.js";
 // const translationsConfigUser = require("../../translations.config.js");
 
 const translationsConfig = {
-  defaultLocale: translationsConfigUser?.defaultLocale || "pl",
+  defaultLocale: translationsConfigUser?.defaultLocale || "en",
   locales: translationsConfigUser?.locales || ["en"],
-  linkFetchTranslations: translationsConfigUser?.linkFetchTranslations,
   outputFolderTranslations:
     translationsConfigUser?.outputFolderTranslations || "/public/locales",
-  nameFolderMultirouting:
-    translationsConfigUser?.nameFolderMultirouting || "locale",
   languageWithoutMultirouting:
     translationsConfigUser?.languageWithoutMultirouting || undefined,
   constNamespaces: translationsConfigUser?.constNamespaces || ["common"],
-  namespaces: translationsConfigUser?.namespaces || ["common"],
 };
 
 const allTranslationsLanguages = translationsConfig.locales;
