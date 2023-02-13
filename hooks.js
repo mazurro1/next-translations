@@ -176,10 +176,10 @@ var useTranslation = function (namespace) {
                 }
                 else if (indexText > componentStartIndex &&
                     indexText < componentEndIndex) {
-                    textComponent = "".concat(textComponent ? " " + textComponent : "").concat(itemText);
+                    textComponent = "".concat(textComponent ? textComponent + " " : "").concat(itemText);
                 }
                 else if (indexText > componentEndIndex) {
-                    textAfter = "".concat(textAfter ? " " + textAfter : "").concat(itemText);
+                    textAfter = "".concat(textAfter ? textAfter + " " : "").concat(itemText);
                 }
             }
             else if (componentOnlyIndex >= 0) {
@@ -187,11 +187,11 @@ var useTranslation = function (namespace) {
                     textBefore = "".concat(textBefore ? textBefore + " " : "").concat(itemText);
                 }
                 else if (indexText > componentOnlyIndex) {
-                    textAfter = "".concat(textAfter ? " " + textAfter : "").concat(itemText);
+                    textAfter = "".concat(textAfter ? textAfter + " " : "").concat(itemText);
                 }
             }
             else {
-                text = "".concat(text ? " " + text : "").concat(itemText);
+                text = "".concat(text ? text + " " : "").concat(itemText);
             }
         });
         return callback({
