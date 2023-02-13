@@ -125,6 +125,25 @@ export default Home;
 
 ```
 
+**useTranslation - all functions**
+
+```bash
+const { t, tString, tNumber, tArray, tObject, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
+
+pageTranslations // all transactions that are available on this subpage
+
+t("section.text1"); // if there is a translation, it returns it as any, if not, it returns undefined
+
+tString("section.text2"); // if there is a translation and it has a string type, it returns it as string, if it doesn't find it, or it has the wrong type, it returns undefined.
+
+tNumber("section.text3"); // if there is a translation and it has a number type, it returns it as number, if it doesn't find it, or it has the wrong type, it returns undefined.
+
+tArray("section.text4"); // if there is a translation and it has a any[] type, it returns it as any[], if it doesn't find it, or it has the wrong type, it returns undefined.
+
+tObject("section.text5"); // if there is a translation and it has a object type, it returns it as object, if it doesn't find it, or it has the wrong type, it returns undefined.
+
+```
+
 **package.json**
 
 You need to install these packages to be able to download your translations from the api:
