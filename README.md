@@ -128,7 +128,7 @@ export default Home;
 **useTranslation - all functions**
 
 ```bash
-const { t, tString, tNumber, tArray, tObject, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
+const { t, tString, tNumber, tArray, tObject, tComponent, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
 
 pageTranslations // all transactions that are available on this subpage
 
