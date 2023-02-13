@@ -109,7 +109,7 @@ var useTranslation = function (namespace) {
                 console.log("next-translations - Fail translation ".concat(namespace, ": ").concat(slug));
                 return callback({
                     textBefore: undefined,
-                    children: undefined,
+                    textComponent: undefined,
                     textAfter: undefined
                 });
             }
@@ -145,7 +145,7 @@ var useTranslation = function (namespace) {
         var componentIndex = -1;
         var textBefore = "";
         var textAfter = "";
-        var componentText = undefined;
+        var textComponent = undefined;
         var generatedTextArray = generatedText.split(" ");
         generatedTextArray.forEach(function (itemText, indexText) {
             var hasStartComponent = itemText.includes("<" + translationsConfig.componentNameToReplaced + ">");
@@ -166,19 +166,19 @@ var useTranslation = function (namespace) {
                 else {
                     var isOnlyComponent = itemText.includes("<" + translationsConfig.componentNameToReplaced + "/>");
                     if (isOnlyComponent) {
-                        componentText = undefined;
+                        textComponent = undefined;
                     }
                     else {
                         var sliceStartComponent = itemText.slice(translationsConfig.componentNameToReplaced.length + 2, itemText.length);
                         var indexEndComponent = sliceStartComponent.lastIndexOf("</" + translationsConfig.componentNameToReplaced + ">");
-                        componentText = sliceStartComponent.slice(0, indexEndComponent);
+                        textComponent = sliceStartComponent.slice(0, indexEndComponent);
                     }
                 }
             });
         }
         return callback({
             textBefore: textBefore,
-            children: componentText,
+            textComponent: textComponent,
             textAfter: textAfter
         });
     };

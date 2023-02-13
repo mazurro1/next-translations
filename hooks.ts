@@ -15,7 +15,7 @@ type IType = "string" | "number" | "array" | "object" | "any";
 
 type ICallbackType = {
   textBefore: string | undefined;
-  children: string | undefined;
+  textComponent: string | undefined;
   textAfter: string | undefined;
 };
 
@@ -139,7 +139,7 @@ const useTranslation = (namespace: string) => {
         );
         return callback({
           textBefore: undefined,
-          children: undefined,
+          textComponent: undefined,
           textAfter: undefined,
         });
       },
@@ -212,7 +212,7 @@ const useTranslation = (namespace: string) => {
     let componentIndex: number = -1;
     let textBefore = "";
     let textAfter = "";
-    let componentText: string | undefined = undefined;
+    let textComponent: string | undefined = undefined;
 
     const generatedTextArray = generatedText.split(" ");
 
@@ -242,7 +242,7 @@ const useTranslation = (namespace: string) => {
             "<" + translationsConfig.componentNameToReplaced + "/>"
           );
           if (isOnlyComponent) {
-            componentText = undefined;
+            textComponent = undefined;
           } else {
             const sliceStartComponent = itemText.slice(
               translationsConfig.componentNameToReplaced.length + 2,
@@ -251,15 +251,15 @@ const useTranslation = (namespace: string) => {
             const indexEndComponent = sliceStartComponent.lastIndexOf(
               "</" + translationsConfig.componentNameToReplaced + ">"
             );
-            componentText = sliceStartComponent.slice(0, indexEndComponent);
+            textComponent = sliceStartComponent.slice(0, indexEndComponent);
           }
         }
       });
     }
     return callback({
-      textBefore: textBefore,
-      children: componentText,
-      textAfter: textAfter,
+      textBefore,
+      textComponent,
+      textAfter,
     });
   };
 

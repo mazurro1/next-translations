@@ -8,7 +8,7 @@ type IPageTranslationsType = {
 type IType = "string" | "number" | "array" | "object" | "any";
 type ICallbackType = {
     textBefore: string | undefined;
-    children: string | undefined;
+    textComponent: string | undefined;
     textAfter: string | undefined;
 };
 declare let pageTranslations: IPageTranslationsType | null;
