@@ -28,7 +28,7 @@
     "static",
     "sites"
   ],
-  "version": "4.2.4",
+  "version": "4.2.5",
   "description": "Translations to NextJS app",
   "main": "index.js",
   "scripts": {

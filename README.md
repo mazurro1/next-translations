@@ -144,12 +144,9 @@ tObject("section.text5"); // if there is a translation and it has a object type,
 
 
 //if there is a translation and it has type string, if it doesn't find it or it has wrong type it returns undefined. If it contains <TComponent> value </TComponent> or <TComponent/>, you can create your own component based on the values returned from the callback. **Note** the text inside <TComponent> must be separated by a space between <TComponent> and </TComponent>!!!!! Example of correct implementation:
-
 {
   "title": "example paragraph <TComponent> xxxx sad </TComponent> paragraph"
 }
-
-
 tComponent(
   "section.textLink",
   ({ textBefore, textComponent, textAfter, text }) => { // value from callback to create your own component. text is returned when it doesn't find a TComponent inside the text
