@@ -13,6 +13,12 @@ type IPageTranslationsType = {
 
 type IType = "string" | "number" | "array" | "object" | "any";
 
+type ICallbackType = {
+  textBefore: string | undefined;
+  children: string | undefined;
+  textAfter: string | undefined;
+};
+
 let pageTranslations: IPageTranslationsType | null = null;
 
 const initializeTranslations = (translations: IPageTranslationsType) => {
@@ -127,11 +133,15 @@ const useTranslation = (namespace: string) => {
         );
         return undefined;
       },
-      tComponent: (slug: string) => {
+      tComponent: (slug: string, callback: ({}: ICallbackType) => string) => {
         console.log(
           `next-translations - Fail translation ${namespace}: ${slug}`
         );
-        return undefined;
+        return callback({
+          textBefore: undefined,
+          children: undefined,
+          textAfter: undefined,
+        });
       },
     };
   }
@@ -184,7 +194,10 @@ const useTranslation = (namespace: string) => {
     );
   };
 
-  const tComponent = (slug: string = "", callback): any | undefined => {
+  const tComponent = (
+    slug: string = "",
+    callback: ({}: ICallbackType) => string
+  ) => {
     const generatedText: string | undefined = generateTranslationWithType(
       slug,
       translationsNamespace,
@@ -246,8 +259,11 @@ const useTranslation = (namespace: string) => {
         }
       });
     }
-
-    return callback({textBefore, children: componentText, textAfter});
+    return callback({
+      textBefore: textBefore,
+      children: componentText,
+      textAfter: textAfter,
+    });
   };
 
   return {
