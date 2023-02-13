@@ -133,7 +133,7 @@ const useTranslation = (namespace: string) => {
         );
         return undefined;
       },
-      tComponent: (slug: string, callback: ({}: ICallbackType) => string) => {
+      tComponent: (slug: string, callback: ({}: ICallbackType) => any) => {
         console.log(
           `next-translations - Fail translation ${namespace}: ${slug}`
         );
@@ -196,7 +196,7 @@ const useTranslation = (namespace: string) => {
 
   const tComponent = (
     slug: string = "",
-    callback: ({}: ICallbackType) => string
+    callback: ({}: ICallbackType) => any
   ) => {
     const generatedText: string | undefined = generateTranslationWithType(
       slug,
@@ -245,16 +245,13 @@ const useTranslation = (namespace: string) => {
             componentText = undefined;
           } else {
             const sliceStartComponent = itemText.slice(
-              0,
-              translationsConfig.componentNameToReplaced.length + 2
+              translationsConfig.componentNameToReplaced.length + 2,
+              itemText.length
             );
             const indexEndComponent = sliceStartComponent.lastIndexOf(
               "</" + translationsConfig.componentNameToReplaced + ">"
             );
-            componentText = sliceStartComponent.slice(
-              indexEndComponent,
-              translationsConfig.componentNameToReplaced.length + 2
-            );
+            componentText = sliceStartComponent.slice(0, indexEndComponent);
           }
         }
       });

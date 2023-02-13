@@ -1,3 +1,9 @@
+//@ts-ignore
+// import translationsConfigUser from "../../translations.config.js";
+var translationsConfigUser = require("../../translations.config.js");
+var translationsConfig = {
+    componentNameToReplaced: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.componentNameToReplaced) || "TComponent"
+};
 var pageTranslations = null;
 var initializeTranslations = function (translations) {
     pageTranslations = translations;
@@ -98,6 +104,14 @@ var useTranslation = function (namespace) {
             tObject: function (slug) {
                 console.log("next-translations - Fail translation ".concat(namespace, ": ").concat(slug));
                 return undefined;
+            },
+            tComponent: function (slug, callback) {
+                console.log("next-translations - Fail translation ".concat(namespace, ": ").concat(slug));
+                return callback({
+                    textBefore: undefined,
+                    children: undefined,
+                    textAfter: undefined
+                });
             }
         };
     }
@@ -122,12 +136,59 @@ var useTranslation = function (namespace) {
         if (slug === void 0) { slug = ""; }
         return generateTranslationWithType(slug, translationsNamespace, namespace, "object");
     };
+    var tComponent = function (slug, callback) {
+        if (slug === void 0) { slug = ""; }
+        var generatedText = generateTranslationWithType(slug, translationsNamespace, namespace, "string");
+        if (!generatedText) {
+            return undefined;
+        }
+        var componentIndex = -1;
+        var textBefore = "";
+        var textAfter = "";
+        var componentText = undefined;
+        var generatedTextArray = generatedText.split(" ");
+        generatedTextArray.forEach(function (itemText, indexText) {
+            var hasStartComponent = itemText.includes("<" + translationsConfig.componentNameToReplaced + ">");
+            var hasEndComponent = itemText.includes("</" + translationsConfig.componentNameToReplaced + ">");
+            var isOnlyComponent = itemText.includes("<" + translationsConfig.componentNameToReplaced + "/>");
+            if ((hasStartComponent && hasEndComponent) || isOnlyComponent) {
+                componentIndex = indexText;
+            }
+        });
+        if (componentIndex >= 0) {
+            generatedTextArray.forEach(function (itemText, indexText) {
+                if (indexText < componentIndex) {
+                    textBefore = "".concat(textBefore ? textBefore + " " : "").concat(itemText);
+                }
+                else if (indexText > componentIndex) {
+                    textAfter = "".concat(textAfter ? " " + textAfter : "").concat(itemText);
+                }
+                else {
+                    var isOnlyComponent = itemText.includes("<" + translationsConfig.componentNameToReplaced + "/>");
+                    if (isOnlyComponent) {
+                        componentText = undefined;
+                    }
+                    else {
+                        var sliceStartComponent = itemText.slice(translationsConfig.componentNameToReplaced.length + 2, itemText.length);
+                        var indexEndComponent = sliceStartComponent.lastIndexOf("</" + translationsConfig.componentNameToReplaced + ">");
+                        componentText = sliceStartComponent.slice(0, indexEndComponent);
+                    }
+                }
+            });
+        }
+        return callback({
+            textBefore: textBefore,
+            children: componentText,
+            textAfter: textAfter
+        });
+    };
     return {
         t: t,
         tString: tString,
         tNumber: tNumber,
         tArray: tArray,
         tObject: tObject,
+        tComponent: tComponent,
         pageTranslations: pageTranslations
     };
 };
