@@ -12,7 +12,6 @@
     "react",
     "reactjs",
     "react.js",
-    "i18n",
     "nextjs",
     "next.js",
     "next",
@@ -29,7 +28,7 @@
     "static",
     "sites"
   ],
-  "version": "2.3.7",
+  "version": "2.3.8",
   "description": "Translations to NextJS app",
   "main": "index.js",
   "scripts": {
