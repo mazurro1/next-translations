@@ -53,6 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
 ```
 
 **/pages/yourPath.tsx**
+`Note: if you don't have languageWithoutMultirouting defined, then you MUST keep content in /pages/[locale]/yourPath.tsx, otherwise you will only have the language that was set as defaultLocale!`
 
 ```bash
 import { getTranslationsProps } from "next-translations";
