@@ -1,6 +1,8 @@
 import fse from "fs-extra";
 import fetch from "node-fetch";
 import translationsConfigUser from "../../translations.config.js";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const translationsConfig = {
   locales: translationsConfigUser?.locales || ["en"],
@@ -16,6 +18,7 @@ const fetchLanguages = async (language, namespace) => {
     return;
   }
   const linkToFetch = translationsConfig.linkFetchTranslations(
+    process.env?.FLEX_PUBLIC_APP_ENV,
     language,
     namespace
   );

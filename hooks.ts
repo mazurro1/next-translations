@@ -1,6 +1,6 @@
 //@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
-// const translationsConfigUser = require("../../translations.config.js");
+// const translationsConfigUser = require("../../translations.config.ts");
 
 const translationsConfig = {
   componentNameToReplaced:

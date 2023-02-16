@@ -4,7 +4,7 @@ import path from "path";
 import translationsConfigUser from "../../translations.config.js";
 // const fse = require("fs-extra");
 // const path = require("path");
-// const translationsConfigUser = require("../../translations.config.js");
+// const translationsConfigUser = require("../../translations.config.ts");
 
 const translationsConfig = {
   defaultLocale: translationsConfigUser?.defaultLocale || "en",
