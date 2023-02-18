@@ -1,7 +1,5 @@
 import fse from "fs-extra";
 import path from "path";
-// const fse = require("fs-extra");
-// const path = require("path");
 
 const exists = await fse.pathExists(
   path.resolve(__dirname, `../../translations.config.ts`)
@@ -304,4 +302,3 @@ const useTranslation = (namespace: string) => {
 };
 
 export {initializeTranslations, pageTranslations, useTranslation};
-// module.exports = {initializeTranslations, pageTranslations, useTranslation};
