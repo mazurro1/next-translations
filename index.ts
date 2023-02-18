@@ -1,7 +1,10 @@
 //@ts-ignore
-import translationsConfigUser from "../../translations.config.ts";
+import translationsConfigUser from "../../translations.config.js";
 import fse from "fs-extra";
 import path from "path";
+// const translationsConfigUser = require("../../translations.config.js");
+// const fse = require("fs-extra");
+// const path = require("path");
 
 const translationsConfig = {
   defaultLocale: translationsConfigUser?.defaultLocale || "en",
@@ -82,3 +85,10 @@ export {
   getPaths,
   getStaticPaths,
 };
+
+// module.exports = {
+//   allTranslationsLanguages,
+//   getTranslationsProps,
+//   getPaths,
+//   getStaticPaths,
+// };

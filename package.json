@@ -28,12 +28,13 @@
     "static",
     "sites"
   ],
-  "version": "5.0.7",
+  "version": "5.0.11",
   "description": "Translations to NextJS app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "tsc -d index.ts --module system --target es2020 --out index.js && tsc -d hooks.ts --module system --target es2020 --out hooks.js",
+    "compile": "tsc -d index.ts --out index.js && tsc -d hooks.ts --out hooks.js",
+    "compile2": "tsc -d index.ts --module system --target es2020 --out index.js && tsc -d hooks.ts --module system --target es2020 --out hooks.js",
     "publish": "npm publish --access public"
   },
   "license": "MIT",

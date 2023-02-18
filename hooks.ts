@@ -1,5 +1,6 @@
 //@ts-ignore
-import translationsConfigUser from "../../translations.config.ts";
+import translationsConfigUser from "../../translations.config.js";
+// const translationsConfigUser = require("../../translations.config.js");
 
 const translationsConfig = {
   componentNameToReplaced:
@@ -283,3 +284,4 @@ const useTranslation = (namespace: string) => {
 };
 
 export {initializeTranslations, pageTranslations, useTranslation};
+// module.exports = {initializeTranslations, pageTranslations, useTranslation};
