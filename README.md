@@ -62,7 +62,8 @@ import { GetStaticProps } from "next";
 
 function Home() {
   const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
-  const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements
+  const { t, pageTranslations } = useTranslation("common:section"); // if you want you can also refer to namespace, along with nested elements - 1 example
+  const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements - 2 example
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
@@ -100,7 +101,8 @@ import { GetStaticProps } from "next";
 
 function Home() {
   const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
-  const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements
+  const { t, pageTranslations } = useTranslation("common:section"); // if you want you can also refer to namespace, along with nested elements - 1 example
+  const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements - 2 example
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
@@ -134,8 +136,8 @@ export default Home;
 
 ```bash
 const { t, tString, tNumber, tArray, tObject, tComponent, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
-const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements
-
+const { t, pageTranslations } = useTranslation("common:section"); // if you want you can also refer to namespace, along with nested elements - 1 example
+const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements - 2 example
 pageTranslations // all transactions that are available on this subpage
 
 t("section.text1"); // if there is a translation, it returns it as any, if not, it returns undefined

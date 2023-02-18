@@ -67,8 +67,13 @@ const generateTranslationWithType = (
     console.log(`next-translations - fail load namespace: ${namespace}`);
     return undefined;
   }
+  const replaceSlugPathFromNamespace = slug.replace(":", ".");
 
-  const pathTranslated = resolvePath(translationsNamespace, slug, undefined);
+  const pathTranslated = resolvePath(
+    translationsNamespace,
+    replaceSlugPathFromNamespace,
+    undefined
+  );
 
   if (pathTranslated === undefined) {
     console.log(`next-translations - Fail translation ${namespace}: ${slug}`);
@@ -136,9 +141,11 @@ const useTranslation = (namespace: string) => {
     };
   }
 
+  const replacePathFromNamespace = namespace.replace(":", ".");
+
   const translationsNamespace: IPageTranslationsType | undefined = resolvePath(
     pageTranslations,
-    namespace,
+    replacePathFromNamespace,
     undefined
   );
 

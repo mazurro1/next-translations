@@ -50,7 +50,8 @@ const generateTranslationWithType = (slug, translationsNamespace, namespace, typ
         console.log(`next-translations - fail load namespace: ${namespace}`);
         return undefined;
     }
-    const pathTranslated = resolvePath(translationsNamespace, slug, undefined);
+    const replaceSlugPathFromNamespace = slug.replace(":", ".");
+    const pathTranslated = resolvePath(translationsNamespace, replaceSlugPathFromNamespace, undefined);
     if (pathTranslated === undefined) {
         console.log(`next-translations - Fail translation ${namespace}: ${slug}`);
         return undefined;
@@ -102,7 +103,8 @@ const useTranslation = (namespace) => {
             },
         };
     }
-    const translationsNamespace = resolvePath(pageTranslations, namespace, undefined);
+    const replacePathFromNamespace = namespace.replace(":", ".");
+    const translationsNamespace = resolvePath(pageTranslations, replacePathFromNamespace, undefined);
     const t = (slug = "") => {
         return generateTranslationWithType(slug, translationsNamespace, namespace, "any");
     };
