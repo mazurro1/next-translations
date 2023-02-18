@@ -1,6 +1,6 @@
-System.register("index", ["fs-extra", "path"], function (exports_1, context_1) {
+System.register("index", ["../../translations.config.ts", "fs-extra", "path"], function (exports_1, context_1) {
     "use strict";
-    var fs_extra_1, path_1, exists, translationsConfigUser, translationsConfig, allTranslationsLanguages, getTranslationsFromFiles, getPaths, getStaticPaths;
+    var translations_config_ts_1, fs_extra_1, path_1, translationsConfig, allTranslationsLanguages, getTranslationsFromFiles, getPaths, getStaticPaths;
     var __moduleName = context_1 && context_1.id;
     async function getTranslationsProps(ctx, ns = []) {
         let locale = translationsConfig.defaultLocale;
@@ -19,6 +19,9 @@ System.register("index", ["fs-extra", "path"], function (exports_1, context_1) {
     exports_1("getTranslationsProps", getTranslationsProps);
     return {
         setters: [
+            function (translations_config_ts_1_1) {
+                translations_config_ts_1 = translations_config_ts_1_1;
+            },
             function (fs_extra_1_1) {
                 fs_extra_1 = fs_extra_1_1;
             },
@@ -26,21 +29,13 @@ System.register("index", ["fs-extra", "path"], function (exports_1, context_1) {
                 path_1 = path_1_1;
             }
         ],
-        execute: async function () {
-            exists = await fs_extra_1.default.pathExists(path_1.default.resolve(__dirname, `../../translations.config.ts`));
-            translationsConfigUser = undefined;
-            if (exists) {
-                translationsConfigUser = path_1.default.resolve(__dirname, `../../translations.config.ts`);
-            }
-            else {
-                console.log(`next-translations - fail on load translations.config.ts`);
-            }
+        execute: function () {
             translationsConfig = {
-                defaultLocale: translationsConfigUser?.defaultLocale || "en",
-                locales: translationsConfigUser?.locales || ["en"],
-                outputFolderTranslations: translationsConfigUser?.outputFolderTranslations || "/public/locales",
-                languageWithoutMultirouting: translationsConfigUser?.languageWithoutMultirouting || undefined,
-                constNamespaces: translationsConfigUser?.constNamespaces || ["common"],
+                defaultLocale: translations_config_ts_1.default?.defaultLocale || "en",
+                locales: translations_config_ts_1.default?.locales || ["en"],
+                outputFolderTranslations: translations_config_ts_1.default?.outputFolderTranslations || "/public/locales",
+                languageWithoutMultirouting: translations_config_ts_1.default?.languageWithoutMultirouting || undefined,
+                constNamespaces: translations_config_ts_1.default?.constNamespaces || ["common"],
             };
             allTranslationsLanguages = translationsConfig.locales;
             exports_1("allTranslationsLanguages", allTranslationsLanguages);

@@ -1,24 +1,5 @@
-import fse from "fs-extra";
-import path from "path";
-
-const exists = await fse.pathExists(
-  path.resolve(__dirname, `../../translations.config.ts`)
-);
-
-type TranslationsConfigType = {
-  componentNameToReplaced?: string;
-};
-
-let translationsConfigUser: TranslationsConfigType | undefined = undefined;
-
-if (exists) {
-  translationsConfigUser = path.resolve(
-    __dirname,
-    `../../translations.config.ts`
-  ) as TranslationsConfigType;
-} else {
-  console.log(`next-translations - fail on load translations.config.ts`);
-}
+//@ts-ignore
+import translationsConfigUser from "../../translations.config.ts";
 
 const translationsConfig = {
   componentNameToReplaced:

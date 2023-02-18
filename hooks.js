@@ -1,27 +1,16 @@
-System.register("hooks", ["fs-extra", "path"], function (exports_1, context_1) {
+System.register("hooks", ["../../translations.config.ts"], function (exports_1, context_1) {
     "use strict";
-    var fs_extra_1, path_1, exists, translationsConfigUser, translationsConfig, pageTranslations, resolvePath, initializeTranslations, checkTypesAndReturn, generateTranslationWithType, useTranslation;
+    var translations_config_ts_1, translationsConfig, pageTranslations, resolvePath, initializeTranslations, checkTypesAndReturn, generateTranslationWithType, useTranslation;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (fs_extra_1_1) {
-                fs_extra_1 = fs_extra_1_1;
-            },
-            function (path_1_1) {
-                path_1 = path_1_1;
+            function (translations_config_ts_1_1) {
+                translations_config_ts_1 = translations_config_ts_1_1;
             }
         ],
-        execute: async function () {
-            exists = await fs_extra_1.default.pathExists(path_1.default.resolve(__dirname, `../../translations.config.ts`));
-            translationsConfigUser = undefined;
-            if (exists) {
-                translationsConfigUser = path_1.default.resolve(__dirname, `../../translations.config.ts`);
-            }
-            else {
-                console.log(`next-translations - fail on load translations.config.ts`);
-            }
+        execute: function () {
             translationsConfig = {
-                componentNameToReplaced: translationsConfigUser?.componentNameToReplaced || "TComponent",
+                componentNameToReplaced: translations_config_ts_1.default?.componentNameToReplaced || "TComponent",
             };
             pageTranslations = null;
             exports_1("pageTranslations", pageTranslations);

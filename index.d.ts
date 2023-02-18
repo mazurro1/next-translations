@@ -1,5 +1,5 @@
 declare module "index" {
-    const allTranslationsLanguages: string[];
+    const allTranslationsLanguages: any;
     function getTranslationsProps(ctx: any, ns?: string[]): Promise<{
         translations: {};
     }>;
