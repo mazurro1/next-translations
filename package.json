@@ -28,7 +28,7 @@
     "static",
     "sites"
   ],
-  "version": "5.2.0",
+  "version": "6.0.0",
   "description": "Translations to NextJS app",
   "main": "./index.js",
   "type": "module",
@@ -43,7 +43,6 @@
     "react": ">= 16.8.0"
   },
   "dependencies": {
-    "@types/fs-extra": "^11.0.1",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.1.0",
@@ -53,5 +52,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/mazurro1/next-translations"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1"
   }
 }
