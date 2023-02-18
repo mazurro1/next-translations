@@ -28,14 +28,14 @@
     "static",
     "sites"
   ],
-  "version": "6.0.0",
+  "version": "6.2.0",
   "description": "Translations to NextJS app",
   "main": "./index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "publish": "npm publish --access public",
-    "build": "tsc -d --outDir ./"
+    "build": "tsc -d --outDir ./ && tsc --outDir ./"
   },
   "license": "MIT",
   "peerDependencies": {
@@ -46,6 +46,7 @@
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.1.0",
+    "node-fetch": "^3.3.0",
     "path": "^0.12.7",
     "url": "^0.11.0"
   },

@@ -1,1 +1,7 @@
 node_modules
+getTranslations.js
+getTranslations.d.ts
+hooks.js
+hooks.d.ts
+index.js
+index.d.ts

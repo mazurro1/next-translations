@@ -170,14 +170,9 @@ tComponent(
 
 **package.json**
 
-You need to install these packages to be able to download your translations from the api:
-
-- fs-extra (https://www.npmjs.com/package/fs-extra)
-- node-fetch (https://www.npmjs.com/package/node-fetch)
-
 ```bash
 "scripts": {
-    "getTranslations": "node node_modules/next-translations/getTranslations.mjs", // script to fetch all translations from your api **linkFetchTranslations**
+    "getTranslations": "node node_modules/next-translations/getTranslations", // script to fetch all translations from your api **linkFetchTranslations**
     "dev": "npm run getTranslations && next dev",
     "build": "npm run getTranslations && next build",
 }

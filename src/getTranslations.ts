@@ -1,7 +1,10 @@
 import fse from "fs-extra";
 import fetch from "node-fetch";
+//@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
 import * as dotenv from "dotenv";
+import path from "path";
+import {fileURLToPath} from "url";
 dotenv.config();
 
 const translationsConfig = {
@@ -12,7 +15,7 @@ const translationsConfig = {
   namespaces: translationsConfigUser?.namespaces || ["common"],
 };
 
-const fetchLanguages = async (language, namespace) => {
+const fetchLanguages = async (language: string, namespace: string) => {
   if (!translationsConfig?.linkFetchTranslations) {
     console.log("No detected link to download translations :(");
     return;
@@ -28,6 +31,8 @@ const fetchLanguages = async (language, namespace) => {
 
 export const downloadLanguages = async () => {
   console.log("Fetching translations from api...");
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
 
   try {
     for (const lang of translationsConfig.locales) {
@@ -36,10 +41,10 @@ export const downloadLanguages = async () => {
       for (const namespace of translationsConfig.namespaces) {
         const data = await fetchLanguages(validLanguage, namespace);
         if (data) {
-          await fse.outputFile(
-            `.${translationsConfig.outputFolderTranslations}/${lang}/${namespace}.json`,
-            JSON.stringify(data)
-          );
+          const folderPath = `../..${translationsConfig.outputFolderTranslations}/${lang}/${namespace}.json`;
+          const pathToFile = path.resolve(__dirname, folderPath);
+
+          await fse.outputFile(pathToFile, JSON.stringify(data));
         }
       }
     }
