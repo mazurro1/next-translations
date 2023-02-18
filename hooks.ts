@@ -21,6 +21,9 @@ type ICallbackType = {
 
 let pageTranslations: IPageTranslationsType | null = null;
 
+const resolvePath = (object: any, path: string, defaultValue = undefined) =>
+  path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
+
 const initializeTranslations = (translations: IPageTranslationsType) => {
   pageTranslations = translations;
 };
@@ -66,29 +69,17 @@ const generateTranslationWithType = (
     return undefined;
   }
 
-  const splitPath = slug.split(".");
-  let pathTranslationd: IPageTranslationsType | null = null;
-  for (const path of splitPath) {
-    const tryTranslation: IPageTranslationsType = pathTranslationd
-      ? pathTranslationd[path]
-      : translationsNamespace[path];
+  const pathTranslated = resolvePath(translationsNamespace, slug, undefined);
 
-    if (tryTranslation !== undefined) {
-      pathTranslationd = tryTranslation;
-    } else {
-      console.log(`next-translations - Fail translation ${namespace}: ${slug}`);
-      return undefined;
-    }
-  }
-
-  if ((pathTranslationd as any) === `${namespace}: ${slug}`) {
-    return pathTranslationd;
+  if (pathTranslated === undefined) {
+    console.log(`next-translations - Fail translation ${namespace}: ${slug}`);
+    return undefined;
   }
 
   if (type) {
-    const validValue = checkTypesAndReturn(type, pathTranslationd);
-    if (validValue !== undefined) {
-      return validValue;
+    const validPathTranslted = checkTypesAndReturn(type, pathTranslated);
+    if (validPathTranslted !== undefined) {
+      return validPathTranslted;
     } else {
       console.log(
         `next-translations - Fail type in translation ${namespace}: ${slug}`
@@ -96,7 +87,7 @@ const generateTranslationWithType = (
       return undefined;
     }
   } else {
-    return pathTranslationd;
+    return pathTranslated;
   }
 };
 
@@ -105,37 +96,37 @@ const useTranslation = (namespace: string) => {
     return {
       t: (slug: string) => {
         console.log(
-          `next-translations - Fail translation ${namespace}: ${slug}`
+          `next-translations - No detected translations for this page ${namespace}: ${slug}`
         );
         return undefined;
       },
       tString: (slug: string) => {
         console.log(
-          `next-translations - Fail translation ${namespace}: ${slug}`
+          `next-translations - No detected translations for this page ${namespace}: ${slug}`
         );
         return undefined;
       },
       tNumber: (slug: string) => {
         console.log(
-          `next-translations - Fail translation ${namespace}: ${slug}`
+          `next-translations - No detected translations for this page ${namespace}: ${slug}`
         );
         return undefined;
       },
       tArray: (slug: string) => {
         console.log(
-          `next-translations - Fail translation ${namespace}: ${slug}`
+          `next-translations - No detected translations for this page ${namespace}: ${slug}`
         );
         return undefined;
       },
       tObject: (slug: string) => {
         console.log(
-          `next-translations - Fail translation ${namespace}: ${slug}`
+          `next-translations - No detected translations for this page ${namespace}: ${slug}`
         );
         return undefined;
       },
       tComponent: (slug: string, callback: ({}: ICallbackType) => any) => {
         console.log(
-          `next-translations - Fail translation ${namespace}: ${slug}`
+          `next-translations - No detected translations for this page ${namespace}: ${slug}`
         );
         return callback({
           textBefore: undefined,
@@ -146,10 +137,13 @@ const useTranslation = (namespace: string) => {
     };
   }
 
-  const translationsNamespace: IPageTranslationsType | undefined =
-    pageTranslations[namespace];
+  const translationsNamespace: IPageTranslationsType | undefined = resolvePath(
+    pageTranslations,
+    namespace,
+    undefined
+  );
 
-  const t = (slug: string = ""): any => {
+  const t = (slug = ""): any => {
     return generateTranslationWithType(
       slug,
       translationsNamespace,
@@ -158,7 +152,7 @@ const useTranslation = (namespace: string) => {
     );
   };
 
-  const tString = (slug: string = ""): string | undefined => {
+  const tString = (slug = ""): string | undefined => {
     return generateTranslationWithType(
       slug,
       translationsNamespace,
@@ -167,7 +161,7 @@ const useTranslation = (namespace: string) => {
     );
   };
 
-  const tNumber = (slug: string = ""): number | undefined => {
+  const tNumber = (slug = ""): number | undefined => {
     return generateTranslationWithType(
       slug,
       translationsNamespace,
@@ -176,7 +170,7 @@ const useTranslation = (namespace: string) => {
     );
   };
 
-  const tArray = (slug: string = ""): any[] | undefined => {
+  const tArray = (slug = ""): any[] | undefined => {
     return generateTranslationWithType(
       slug,
       translationsNamespace,
@@ -185,7 +179,7 @@ const useTranslation = (namespace: string) => {
     );
   };
 
-  const tObject = (slug: string = ""): object | undefined => {
+  const tObject = (slug = ""): object | undefined => {
     return generateTranslationWithType(
       slug,
       translationsNamespace,
@@ -194,10 +188,7 @@ const useTranslation = (namespace: string) => {
     );
   };
 
-  const tComponent = (
-    slug: string = "",
-    callback: ({}: ICallbackType) => any
-  ) => {
+  const tComponent = (slug = "", callback: ({}: ICallbackType) => any) => {
     const generatedText: string | undefined = generateTranslationWithType(
       slug,
       translationsNamespace,

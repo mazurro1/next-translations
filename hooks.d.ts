@@ -12,6 +12,7 @@ type ICallbackType = {
     textAfter: string | undefined;
 };
 declare let pageTranslations: IPageTranslationsType | null;
+declare const resolvePath: (object: any, path: string, defaultValue?: any) => any;
 declare const initializeTranslations: (translations: IPageTranslationsType) => void;
 declare const checkTypesAndReturn: (type: IType, value: any) => any;
 declare const generateTranslationWithType: (slug: string, translationsNamespace: IPageTranslationsType | undefined, namespace: string, type: IType) => any;

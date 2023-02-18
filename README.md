@@ -62,6 +62,7 @@ import { GetStaticProps } from "next";
 
 function Home() {
   const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
@@ -69,7 +70,8 @@ function Home() {
 
   return (
     <div>
-      t("section.title") // downloading translation
+      t("section.title") // downloading translation - without nested elements
+      t("title") // downloading translation - if you using nested elements
     </div>
   );
 }
@@ -98,6 +100,7 @@ import { GetStaticProps } from "next";
 
 function Home() {
   const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
@@ -105,7 +108,8 @@ function Home() {
 
   return (
     <div>
-      t("section.title") // downloading translation
+      t("section.title") // downloading translation - without nested elements
+      t("title") // downloading translation - if you using nested elements
     </div>
   );
 }
@@ -130,6 +134,7 @@ export default Home;
 
 ```bash
 const { t, tString, tNumber, tArray, tObject, tComponent, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
+const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements
 
 pageTranslations // all transactions that are available on this subpage
 
