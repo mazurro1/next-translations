@@ -1,6 +1,12 @@
-declare const translationsConfigUser: any;
+declare const fse: any;
+declare const path: any;
+declare const exists: any;
+type TranslationsConfigType = {
+    componentNameToReplaced?: string;
+};
+declare let translationsConfigUser: TranslationsConfigType | undefined;
 declare const translationsConfig: {
-    componentNameToReplaced: any;
+    componentNameToReplaced: string;
 };
 type IPageTranslationsType = {
     [key: string]: any;

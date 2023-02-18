@@ -1,10 +1,31 @@
 import fse from "fs-extra";
 import path from "path";
-//@ts-ignore
-import translationsConfigUser from "../../translations.config.js";
 // const fse = require("fs-extra");
 // const path = require("path");
-// const translationsConfigUser = require("../../translations.config.ts");
+
+const exists = await fse.pathExists(
+  path.resolve(__dirname, `../../translations.config.ts`)
+);
+
+type TranslationsConfigType = {
+  defaultLocale?: string;
+  locales?: string[];
+  outputFolderTranslations?: string;
+  componentNameToReplaced?: string;
+  languageWithoutMultirouting?: string;
+  constNamespaces?: string[];
+};
+
+let translationsConfigUser: TranslationsConfigType | undefined = undefined;
+
+if (exists) {
+  translationsConfigUser = path.resolve(
+    __dirname,
+    `../../translations.config.ts`
+  ) as TranslationsConfigType;
+} else {
+  console.log(`next-translations - fail on load translations.config.ts`);
+}
 
 const translationsConfig = {
   defaultLocale: translationsConfigUser?.defaultLocale || "en",

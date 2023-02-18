@@ -1,6 +1,15 @@
-//@ts-ignore
-// import translationsConfigUser from "../../translations.config.js";
-var translationsConfigUser = require("../../translations.config.ts");
+// import fse from "fs-extra";
+// import path from "path";
+var fse = require("fs-extra");
+var path = require("path");
+var exists = fse.pathExists(path.resolve(__dirname, "../../translations.config.ts"));
+var translationsConfigUser = undefined;
+if (exists) {
+    translationsConfigUser = path.resolve(__dirname, "../../translations.config.ts");
+}
+else {
+    console.log("next-translations - fail on load translations.config.ts");
+}
 var translationsConfig = {
     componentNameToReplaced: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.componentNameToReplaced) || "TComponent"
 };
