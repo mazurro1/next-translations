@@ -28,15 +28,14 @@
     "static",
     "sites"
   ],
-  "version": "5.1.3",
+  "version": "5.2.0",
   "description": "Translations to NextJS app",
   "main": "./index.js",
-  "types": "./allTypes.d.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "tsc -d index.ts --out index.js && tsc -d hooks.ts --out hooks.js",
-    "compile2": "tsc -d index.ts --module amd --target es2020 --out index.js && tsc -d hooks.ts --module amd --target es2020 --out hooks.js",
-    "publish": "npm publish --access public"
+    "publish": "npm publish --access public",
+    "build": "tsc -d --outDir ./"
   },
   "license": "MIT",
   "peerDependencies": {
@@ -48,7 +47,8 @@
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.1.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "url": "^0.11.0"
   },
   "repository": {
     "type": "git",

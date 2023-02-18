@@ -1,14 +1,11 @@
 {
   "compilerOptions": {
+    "target": "ES2015",
     "module": "ES2020",
-    "target": "ES2020",
-    "rootDir": ".",
-    "outDir": ".",
-    "sourceMap": false,
+    "strict": true,
     "esModuleInterop": true,
-    "composite": true,
-    "declarationMap": true,
-    "moduleResolution": "node"
+    "forceConsistentCasingInFileNames": true
   },
+  "include": ["./"],
   "exclude": ["node_modules"]
 }

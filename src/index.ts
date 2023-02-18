@@ -1,10 +1,8 @@
 //@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
-import * as fse from "fs-extra";
-import * as path from "path";
-// const translationsConfigUser = require("../../translations.config.js");
-// const fse = require("fs-extra");
-// const path = require("path");
+import fse from "fs-extra";
+import path from "path";
+import {fileURLToPath} from "url";
 
 const translationsConfig = {
   defaultLocale: translationsConfigUser?.defaultLocale || "en",
@@ -22,17 +20,17 @@ const getTranslationsFromFiles = async (
   locale: string = translationsConfig.defaultLocale,
   ns: string[] = []
 ) => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
   let translations = {};
   try {
     for (const namespace of ns) {
       const folderPath = `../..${translationsConfig.outputFolderTranslations}/${locale}/${namespace}.json`;
-
-      const exists = await fse.pathExists(path.resolve(__dirname, folderPath));
+      const pathToFile = path.resolve(__dirname, folderPath);
+      const exists = await fse.pathExists(pathToFile);
 
       if (exists) {
-        const translationsJson = await fse.readJson(
-          path.resolve(__dirname, folderPath)
-        );
+        const translationsJson = await fse.readJson(pathToFile);
         if (translationsJson) {
           translations = {...translations, [namespace]: translationsJson};
         }
@@ -85,10 +83,3 @@ export {
   getPaths,
   getStaticPaths,
 };
-
-// module.exports = {
-//   allTranslationsLanguages,
-//   getTranslationsProps,
-//   getPaths,
-//   getStaticPaths,
-// };

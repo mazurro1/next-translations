@@ -1,77 +1,78 @@
-define("index", ["require", "exports", "../../translations.config.js", "fs-extra", "path"], function (require, exports, translations_config_js_1, fse, path) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getStaticPaths = exports.getPaths = exports.getTranslationsProps = exports.allTranslationsLanguages = void 0;
-    // const translationsConfigUser = require("../../translations.config.js");
-    // const fse = require("fs-extra");
-    // const path = require("path");
-    const translationsConfig = {
-        defaultLocale: translations_config_js_1.default?.defaultLocale || "en",
-        locales: translations_config_js_1.default?.locales || ["en"],
-        outputFolderTranslations: translations_config_js_1.default?.outputFolderTranslations || "/public/locales",
-        languageWithoutMultirouting: translations_config_js_1.default?.languageWithoutMultirouting || undefined,
-        constNamespaces: translations_config_js_1.default?.constNamespaces || ["common"],
-    };
-    const allTranslationsLanguages = translationsConfig.locales;
-    exports.allTranslationsLanguages = allTranslationsLanguages;
-    const getTranslationsFromFiles = async (locale = translationsConfig.defaultLocale, ns = []) => {
-        let translations = {};
-        try {
-            for (const namespace of ns) {
-                const folderPath = `../..${translationsConfig.outputFolderTranslations}/${locale}/${namespace}.json`;
-                const exists = await fse.pathExists(path.resolve(__dirname, folderPath));
-                if (exists) {
-                    const translationsJson = await fse.readJson(path.resolve(__dirname, folderPath));
-                    if (translationsJson) {
-                        translations = { ...translations, [namespace]: translationsJson };
-                    }
-                }
-                else {
-                    console.error("Path not found!!!");
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+//@ts-ignore
+import translationsConfigUser from "../../translations.config.js";
+import fse from "fs-extra";
+import path from "path";
+import { fileURLToPath } from "url";
+const translationsConfig = {
+    defaultLocale: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.defaultLocale) || "en",
+    locales: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.locales) || ["en"],
+    outputFolderTranslations: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.outputFolderTranslations) || "/public/locales",
+    languageWithoutMultirouting: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.languageWithoutMultirouting) || undefined,
+    constNamespaces: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.constNamespaces) || ["common"],
+};
+const allTranslationsLanguages = translationsConfig.locales;
+const getTranslationsFromFiles = (locale = translationsConfig.defaultLocale, ns = []) => __awaiter(void 0, void 0, void 0, function* () {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    let translations = {};
+    try {
+        for (const namespace of ns) {
+            const folderPath = `../..${translationsConfig.outputFolderTranslations}/${locale}/${namespace}.json`;
+            const pathToFile = path.resolve(__dirname, folderPath);
+            const exists = yield fse.pathExists(pathToFile);
+            if (exists) {
+                const translationsJson = yield fse.readJson(pathToFile);
+                if (translationsJson) {
+                    translations = Object.assign(Object.assign({}, translations), { [namespace]: translationsJson });
                 }
             }
-            return { translations: translations };
+            else {
+                console.error("Path not found!!!");
+            }
         }
-        catch (err) {
-            console.error(err);
-        }
-    };
-    async function getTranslationsProps(ctx, ns = []) {
+        return { translations: translations };
+    }
+    catch (err) {
+        console.error(err);
+    }
+});
+function getTranslationsProps(ctx, ns = []) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
         let locale = translationsConfig.defaultLocale;
-        if (ctx?.params?.locale) {
+        if ((_a = ctx === null || ctx === void 0 ? void 0 : ctx.params) === null || _a === void 0 ? void 0 : _a.locale) {
             locale = ctx.params.locale;
         }
         const defaultNamespacesToUseInAllPages = translationsConfig.constNamespaces;
-        const props = {
-            ...(await getTranslationsFromFiles(locale, [
-                ...ns,
-                ...defaultNamespacesToUseInAllPages,
-            ])),
-        };
+        const props = Object.assign({}, (yield getTranslationsFromFiles(locale, [
+            ...ns,
+            ...defaultNamespacesToUseInAllPages,
+        ])));
         return props;
-    }
-    exports.getTranslationsProps = getTranslationsProps;
-    const getPaths = () => {
-        return allTranslationsLanguages
-            .filter((item) => item !== translationsConfig.languageWithoutMultirouting)
-            .map((lng) => ({
-            params: {
-                locale: lng,
-            },
-        }));
+    });
+}
+const getPaths = () => {
+    return allTranslationsLanguages
+        .filter((item) => item !== translationsConfig.languageWithoutMultirouting)
+        .map((lng) => ({
+        params: {
+            locale: lng,
+        },
+    }));
+};
+const getStaticPaths = () => {
+    return {
+        fallback: false,
+        paths: getPaths(),
     };
-    exports.getPaths = getPaths;
-    const getStaticPaths = () => {
-        return {
-            fallback: false,
-            paths: getPaths(),
-        };
-    };
-    exports.getStaticPaths = getStaticPaths;
-});
-// module.exports = {
-//   allTranslationsLanguages,
-//   getTranslationsProps,
-//   getPaths,
-//   getStaticPaths,
-// };
+};
+export { allTranslationsLanguages, getTranslationsProps, getPaths, getStaticPaths, };
