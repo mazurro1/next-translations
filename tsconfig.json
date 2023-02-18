@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "target": "ES2020",
+    "rootDir": ".",
+    "outDir": ".",
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "composite": true,
+    "declarationMap": true,
+    "moduleResolution": "node"
+  },
+  "exclude": ["node_modules"]
+}
