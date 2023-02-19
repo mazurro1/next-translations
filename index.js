@@ -56,6 +56,9 @@ function getTranslationsProps(ctx, ns = []) {
                     : ctx.params.locale;
         }
         const defaultNamespacesToUseInAllPages = translationsConfig.constNamespaces;
+        ctx.locale = locale;
+        ctx.locales = translationsConfig.locales;
+        ctx.defaultLocale = translationsConfig.defaultLocale;
         const props = Object.assign({}, (yield getTranslationsFromFiles(locale, [
             ...ns,
             ...defaultNamespacesToUseInAllPages,

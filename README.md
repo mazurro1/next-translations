@@ -1,6 +1,6 @@
 # next-translations
 
-Thanks to this package you will be able to add to your website written in **NextJS** to **download/manage** translations on your website! Thanks to this package you will be able to build a very efficient website that will have generated **pages WITH nested translations!**. Powerful package also for **STATIC pages** in **NextJS**! Very light library only 35kb! Works **without i18n**!
+Thanks to this package you will be able to add to your website written in **NextJS** to **download/manage** translations on your website! Thanks to this package you will be able to build a very efficient website that will have generated **pages WITH nested translations!**. Powerful package also for **STATIC pages** in **NextJS**! Very light library only 31kb! Works **without i18n**!
 
 #### install translations
 
@@ -81,6 +81,11 @@ function Home() {
 export const getStaticProps: GetStaticProps = async ctx => {
   const translationsProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
 
+  // you have access to:
+  // ctx.locale - current locale
+  // ctx.locales - all locales
+  // ctx.defaultLocale - default locale
+
   return {
     props: {
       ...translationsProps,
@@ -122,6 +127,11 @@ function Home() {
 export const getServerSideProps: GetServerSideProps = async ctx => {
   const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
 
+  // you have access to:
+  // ctx.locale - current locale
+  // ctx.locales - all locales
+  // ctx.defaultLocale - default locale
+
   return {
     props: {
       ...translatesProps,
@@ -134,8 +144,6 @@ export default Home;
 ```
 
 **/pages/[locale]/yourPath.tsx** - for **STATIC SITES**
-
-`Attention! You manage the site's languages via slug! eg: /en/home - page with en language, /pl/home - page with pl language`
 
 ```bash
 import { getTranslationsProps, getStaticPaths } from "next-translations";
@@ -161,6 +169,11 @@ function Home() {
 
 export const getStaticProps: GetStaticProps = async ctx => {
   const translationsProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+
+  // you have access to:
+  // ctx.locale - current locale
+  // ctx.locales - all locales
+  // ctx.defaultLocale - default locale
 
   return {
     props: {
@@ -203,6 +216,11 @@ function Home() {
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
   const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+
+  // you have access to:
+  // ctx.locale - current locale
+  // ctx.locales - all locales
+  // ctx.defaultLocale - default locale
 
   return {
     props: {
