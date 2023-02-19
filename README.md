@@ -146,9 +146,9 @@ export default Home;
 **/pages/[locale]/yourPath.tsx** - for **STATIC SITES**
 
 ```bash
-import { getTranslationsProps, getStaticPaths } from "next-translations";
+import { getTranslationsProps, getStaticPaths, getPaths } from "next-translations"; // add getStaticPaths only if you using: export { getStaticPaths }, if you using getStaticPaths from next - dont add this import!
 import { useTranslation } from "next-translations/hooks";
-import { GetStaticProps } from "next";
+import { GetStaticProps, GetStaticPaths } from "next";
 
 function Home() {
   const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
@@ -182,7 +182,16 @@ export const getStaticProps: GetStaticProps = async ctx => {
   };
 }
 
+
 export { getStaticPaths }; // IMPORTANT ADD THIS LINE TO ENABLE MULTI ROUTING
+
+
+export const getStaticPaths: GetStaticPaths = async () => { // IMPORTANT ADD THIS LINE TO ENABLE MULTI ROUTING (alternative)
+  return {
+    fallback: false,
+    paths: getPaths(),
+  };
+}
 
 export default Home;
 
