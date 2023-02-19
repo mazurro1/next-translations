@@ -135,6 +135,8 @@ export default Home;
 
 **/pages/[locale]/yourPath.tsx** - for **STATIC SITES**
 
+`Attention! You manage the site's languages via slug! eg: /en/home - page with en language, /pl/home - page with pl language`
+
 ```bash
 import { getTranslationsProps, getStaticPaths } from "next-translations";
 import { useTranslation } from "next-translations/hooks";
