@@ -50,10 +50,8 @@ function getTranslationsProps(ctx, ns = []) {
     return __awaiter(this, void 0, void 0, function* () {
         let locale = translationsConfig.defaultLocale;
         if ((_a = ctx === null || ctx === void 0 ? void 0 : ctx.params) === null || _a === void 0 ? void 0 : _a.locale) {
-            locale =
-                ctx.params.locale === "sw.js"
-                    ? translationsConfig.defaultLocale
-                    : ctx.params.locale;
+            const isInLocales = translationsConfig.locales.some((itemLocale) => itemLocale === ctx.params.locale);
+            locale = isInLocales ? ctx.params.locale : translationsConfig.defaultLocale;
         }
         const defaultNamespacesToUseInAllPages = translationsConfig.constNamespaces;
         ctx.locale = locale;

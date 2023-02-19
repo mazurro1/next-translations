@@ -1,4 +1,4 @@
-declare const allTranslationsLanguages: any;
+declare const allTranslationsLanguages: string[];
 declare function getTranslationsProps(ctx: any, ns?: string[]): Promise<{
     translations?: {} | undefined;
 }>;

@@ -4,7 +4,15 @@ import fse from "fs-extra";
 import path from "path";
 import {fileURLToPath} from "url";
 
-const translationsConfig = {
+type ITranslationConfigType = {
+  defaultLocale: string;
+  locales: string[];
+  outputFolderTranslations: string;
+  languageWithoutMultirouting?: string;
+  constNamespaces: string[];
+};
+
+const translationsConfig: ITranslationConfigType = {
   defaultLocale: translationsConfigUser?.defaultLocale || "en",
   locales: translationsConfigUser?.locales || ["en"],
   outputFolderTranslations:
@@ -48,10 +56,11 @@ async function getTranslationsProps(ctx: any, ns: string[] = []) {
   let locale: string = translationsConfig.defaultLocale;
 
   if (ctx?.params?.locale) {
-    locale =
-      ctx.params.locale === "sw.js"
-        ? translationsConfig.defaultLocale
-        : ctx.params.locale;
+    const isInLocales = translationsConfig.locales.some(
+      (itemLocale) => itemLocale === ctx.params.locale
+    );
+
+    locale = isInLocales ? ctx.params.locale : translationsConfig.defaultLocale;
   }
   const defaultNamespacesToUseInAllPages = translationsConfig.constNamespaces;
 
