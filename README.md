@@ -33,7 +33,7 @@ npm i next-translations
 }
 ```
 
-**/pages/\_app.tsx**
+**/pages/\_app.tsx** for **STATIC SITES** and **SERVER SIDE RENDERING**
 
 ```bash
 import { initializeTranslations } from "next-translations/hooks";
@@ -52,7 +52,8 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 ```
 
-**/pages/yourPath.tsx**
+**/pages/yourPath.tsx** - for **STATIC SITES**
+
 `Note: if you don't have languageWithoutMultirouting defined, then you MUST keep content in /pages/[locale]/yourPath.tsx, otherwise you will only have the language that was set as defaultLocale!`
 
 ```bash
@@ -89,10 +90,50 @@ export const getStaticProps: GetStaticProps = async ctx => {
 
 export default Home;
 
+```
+
+**/pages/yourPath.tsx** - for **SERVER SIDE RENDERING**
+
+`Note: if you don't have languageWithoutMultirouting defined, then you MUST keep content in /pages/[locale]/yourPath.tsx, otherwise you will only have the language that was set as defaultLocale!`
+
+```bash
+import { getTranslationsProps } from "next-translations";
+import { useTranslation } from "next-translations/hooks";
+import { GetServerSideProps } from "next";
+
+function Home() {
+  const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, pageTranslations } = useTranslation("common:section"); // if you want you can also refer to namespace, along with nested elements - 1 example
+  const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements - 2 example
+
+  // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
+
+  // pageTranslations -> all transactions that are available on this subpage
+
+  return (
+    <div>
+      t("section.title") // downloading translation - without nested elements
+      t("title") // downloading translation - if you using nested elements
+    </div>
+  );
+}
+
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+
+  return {
+    props: {
+      ...translatesProps,
+    },
+  };
+};
+
+export default Home;
 
 ```
 
-**/pages/[locale]/yourPath.tsx**
+**/pages/[locale]/yourPath.tsx** - for **STATIC SITES**
 
 ```bash
 import { getTranslationsProps, getStaticPaths } from "next-translations";
@@ -127,6 +168,46 @@ export const getStaticProps: GetStaticProps = async ctx => {
 }
 
 export { getStaticPaths }; // IMPORTANT ADD THIS LINE TO ENABLE MULTI ROUTING
+
+export default Home;
+
+```
+
+**/pages/[locale]/yourPath.tsx** - for **SERVER SIDE RENDERING**
+
+`Attention! You manage the site's languages via slug! eg: /en/home - page with en language, /pl/home - page with pl language`
+
+```bash
+import { getTranslationsProps } from "next-translations";
+import { useTranslation } from "next-translations/hooks";
+import { GetServerSideProps } from "next";
+
+function Home() {
+  const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, pageTranslations } = useTranslation("common:section"); // if you want you can also refer to namespace, along with nested elements - 1 example
+  const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements - 2 example
+
+  // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
+
+  // pageTranslations -> all transactions that are available on this subpage
+
+  return (
+    <div>
+      t("section.title") // downloading translation - without nested elements
+      t("title") // downloading translation - if you using nested elements
+    </div>
+  );
+}
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+  const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+
+  return {
+    props: {
+      ...translatesProps,
+    },
+  };
+};
 
 export default Home;
 

@@ -46,8 +46,12 @@ const getTranslationsFromFiles = async (
 
 async function getTranslationsProps(ctx: any, ns: string[] = []) {
   let locale: string = translationsConfig.defaultLocale;
+
   if (ctx?.params?.locale) {
-    locale = ctx.params.locale;
+    locale =
+      ctx.params.locale === "sw.js"
+        ? translationsConfig.defaultLocale
+        : ctx.params.locale;
   }
   const defaultNamespacesToUseInAllPages = translationsConfig.constNamespaces;
 

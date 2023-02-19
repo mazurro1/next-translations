@@ -50,7 +50,10 @@ function getTranslationsProps(ctx, ns = []) {
     return __awaiter(this, void 0, void 0, function* () {
         let locale = translationsConfig.defaultLocale;
         if ((_a = ctx === null || ctx === void 0 ? void 0 : ctx.params) === null || _a === void 0 ? void 0 : _a.locale) {
-            locale = ctx.params.locale;
+            locale =
+                ctx.params.locale === "sw.js"
+                    ? translationsConfig.defaultLocale
+                    : ctx.params.locale;
         }
         const defaultNamespacesToUseInAllPages = translationsConfig.constNamespaces;
         const props = Object.assign({}, (yield getTranslationsFromFiles(locale, [
