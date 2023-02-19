@@ -16,10 +16,6 @@ const translationsConfig = {
 };
 
 const fetchLanguages = async (language: string, namespace: string) => {
-  if (!translationsConfig?.linkFetchTranslations) {
-    console.log("No detected link to download translations :(");
-    return;
-  }
   const linkToFetch = translationsConfig.linkFetchTranslations(
     process.env?.FLEX_PUBLIC_APP_ENV,
     language,
@@ -30,6 +26,11 @@ const fetchLanguages = async (language: string, namespace: string) => {
 };
 
 export const downloadLanguages = async () => {
+  if (!translationsConfig?.linkFetchTranslations) {
+    console.log("No detected link to download translations :(");
+    return;
+  }
+
   console.log("Fetching translations from api...");
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
