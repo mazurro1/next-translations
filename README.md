@@ -186,7 +186,7 @@ export const getStaticProps: GetStaticProps = async ctx => {
 export { getStaticPaths }; // IMPORTANT ADD THIS LINE TO ENABLE MULTI ROUTING
 
 
-//ALTERNATIVE
+//ALTERNATIVE with Nextjs getStaticPaths - if you using this, don't impoty getStaticPaths from next-translations
 
 export const getStaticPaths: GetStaticPaths = async () => { // IMPORTANT ADD THIS LINE TO ENABLE MULTI ROUTING (alternative)
   return {

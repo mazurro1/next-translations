@@ -28,7 +28,7 @@
     "static",
     "sites"
   ],
-  "version": "6.5.4",
+  "version": "6.5.5",
   "description": "Translations to NextJS app",
   "main": "./index.js",
   "type": "module",
