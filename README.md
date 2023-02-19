@@ -68,7 +68,7 @@ function Home() {
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
-  // pageTranslations -> all transactions that are available on this subpage
+  // pageTranslations -> all translations that are available on this subpage
 
   return (
     <div>
@@ -79,7 +79,7 @@ function Home() {
 }
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const translationsProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+  const translationsProps = await getTranslationsProps(ctx, ["common"]); // add here all translations in string[] that you use on this subpage
 
   // you have access to:
   // ctx.locale - current locale
@@ -113,7 +113,7 @@ function Home() {
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
-  // pageTranslations -> all transactions that are available on this subpage
+  // pageTranslations -> all translations that are available on this subpage
 
   return (
     <div>
@@ -125,7 +125,7 @@ function Home() {
 
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+  const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all translations in string[] that you use on this subpage
 
   // you have access to:
   // ctx.locale - current locale
@@ -157,7 +157,7 @@ function Home() {
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
-  // pageTranslations -> all transactions that are available on this subpage
+  // pageTranslations -> all translations that are available on this subpage
 
   return (
     <div>
@@ -168,7 +168,7 @@ function Home() {
 }
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const translationsProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+  const translationsProps = await getTranslationsProps(ctx, ["common"]); // add here all translations in string[] that you use on this subpage
 
   // you have access to:
   // ctx.locale - current locale
@@ -204,7 +204,7 @@ function Home() {
 
   // t -> thanks to this function, you can download a given text/object/array at your discretion - just like you have downloaded/added in translations
 
-  // pageTranslations -> all transactions that are available on this subpage
+  // pageTranslations -> all translations that are available on this subpage
 
   return (
     <div>
@@ -215,7 +215,7 @@ function Home() {
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all transactions in string[] that you use on this subpage
+  const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all translations in string[] that you use on this subpage
 
   // you have access to:
   // ctx.locale - current locale
@@ -239,7 +239,8 @@ export default Home;
 const { t, tString, tNumber, tArray, tObject, tComponent, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
 const { t, pageTranslations } = useTranslation("common:section"); // if you want you can also refer to namespace, along with nested elements - 1 example
 const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements - 2 example
-pageTranslations // all transactions that are available on this subpage
+
+pageTranslations // all translations that are available on this subpage
 
 t("section.text1"); // if there is a translation, it returns it as any, if not, it returns undefined
 
