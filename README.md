@@ -186,6 +186,8 @@ export const getStaticProps: GetStaticProps = async ctx => {
 export { getStaticPaths }; // IMPORTANT ADD THIS LINE TO ENABLE MULTI ROUTING
 
 
+//ALTERNATIVE
+
 export const getStaticPaths: GetStaticPaths = async () => { // IMPORTANT ADD THIS LINE TO ENABLE MULTI ROUTING (alternative)
   return {
     fallback: false,
