@@ -1,6 +1,6 @@
 # next-translations
 
-Thanks to this package you will be able to add to your website written in **NextJS** to **download/manage** translations on your website! Thanks to this package you will be able to build a very efficient website that will have generated **pages WITH nested translations!**. Powerful package also for **STATIC** and **SERVER SIDE RENDERING** sites in **NextJS**! Very light library only 18.3kb without README! Works **without i18n**!
+Thanks to this package you will be able to add to your website written in **NextJS** to **download/manage** translations on your website! Thanks to this package you will be able to build a very efficient website that will have generated **pages WITH nested translations!**. Powerful package also for **STATIC** and **SERVER SIDE RENDERING** sites in **NextJS**! Very light library only **18.3kb** without README! Works **without i18n**!
 
 #### install translations
 
