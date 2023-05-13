@@ -73,7 +73,8 @@ const InitializeRedirectsTranslations = ({
       const splitPathname = router.pathname.split("/[locale]");
       linkWithoutLocale = splitPathname.at(1);
     } else {
-      linkWithoutLocale = router.pathname;
+      linkWithoutLocale =
+        router.pathname === "/" && !!linkLocale ? "" : router.pathname;
     }
 
     const redirectLink = `${linkLocale}${linkWithoutLocale}`;
@@ -102,11 +103,9 @@ const InitializeRedirectsTranslations = ({
 
     if (isLoggedUser) {
       if (isSiteForLoggedUser) {
-        if (!!!linkLocale) {
-          if (redirectLink !== actualPath) {
-            if (!isErrorPage) {
-              router.push(redirectLink);
-            }
+        if (redirectLink !== actualPath) {
+          if (!isErrorPage) {
+            router.push(redirectLink);
           }
         }
         return;
@@ -130,11 +129,9 @@ const InitializeRedirectsTranslations = ({
         }
         return;
       } else {
-        if (!!!linkLocale) {
-          if (redirectLink !== actualPath) {
-            if (!isErrorPage) {
-              router.push(redirectLink);
-            }
+        if (redirectLink !== actualPath) {
+          if (!isErrorPage) {
+            router.push(redirectLink);
           }
         }
         return;
