@@ -1,12 +1,106 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 //@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
 const translationsConfig = {
+    defaultLocale: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.defaultLocale) || "en",
+    errorPagePath: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.errorPagePath) || "/404",
     componentNameToReplaced: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.componentNameToReplaced) || "TComponent",
+    redirectForLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.redirectForLoggedUser) || "/",
+    redirectForNoLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.redirectForNoLoggedUser) || "/",
+    sitesForLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.sitesForLoggedUser) || [],
 };
 let pageTranslations = null;
 const resolvePath = (object, path, defaultValue = undefined) => path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
-const initializeTranslations = (translations) => {
-    pageTranslations = translations;
+const InitializeTranslations = ({ translations, isLoggedUser, }) => {
+    const [all, setAll] = useState(translations || null);
+    const router = useRouter();
+    useEffect(() => {
+        setAll(translations);
+    }, [translations, router.route]);
+    useEffect(() => {
+        var _a;
+        if (isLoggedUser === undefined || !router.isReady) {
+            return;
+        }
+        const actualPath = router.route;
+        const selectedLocale = (_a = router === null || router === void 0 ? void 0 : router.query) === null || _a === void 0 ? void 0 : _a.locale;
+        const isLinkWithLocale = !!selectedLocale;
+        const linkLocale = selectedLocale ? `/${selectedLocale}` : "";
+        let linkWithoutLocale = "";
+        if (router.pathname.includes("[locale]")) {
+            const splitPathname = router.pathname.split("/[locale]");
+            linkWithoutLocale = splitPathname.at(1);
+        }
+        else {
+            linkWithoutLocale = router.pathname;
+        }
+        const redirectLink = `${linkLocale}${linkWithoutLocale}`;
+        const isErrorPage = router.pathname === (translationsConfig === null || translationsConfig === void 0 ? void 0 : translationsConfig.errorPagePath);
+        const isSiteForLoggedUser = translationsConfig.sitesForLoggedUser.find((itemRoute) => {
+            if (isLinkWithLocale) {
+                if (`${linkLocale}${itemRoute === "/" ? "" : itemRoute}` ===
+                    redirectLink) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                if (itemRoute === linkWithoutLocale) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }) !== undefined;
+        if (isLoggedUser) {
+            if (isSiteForLoggedUser) {
+                if (!isLinkWithLocale) {
+                    if (redirectLink !== actualPath) {
+                        if (!isErrorPage) {
+                            router.push(redirectLink);
+                        }
+                    }
+                }
+                return;
+            }
+            else {
+                const linkRedirectOnSuccess = `${linkLocale}${translationsConfig.redirectForLoggedUser}`;
+                if (actualPath !== linkRedirectOnSuccess) {
+                    if (!isErrorPage) {
+                        router.push(linkRedirectOnSuccess);
+                    }
+                }
+                return;
+            }
+        }
+        else {
+            if (isSiteForLoggedUser) {
+                const linkRedirectOnFailure = `${linkLocale}${translationsConfig.redirectForNoLoggedUser}`;
+                if (actualPath !== linkRedirectOnFailure) {
+                    if (!isErrorPage) {
+                        router.push(linkRedirectOnFailure);
+                    }
+                }
+                return;
+            }
+            else {
+                if (!isLinkWithLocale) {
+                    if (redirectLink !== actualPath) {
+                        if (!isErrorPage) {
+                            router.push(redirectLink);
+                        }
+                    }
+                }
+                return;
+            }
+        }
+    }, [isLoggedUser, router.asPath]);
+    pageTranslations = all;
 };
 const checkTypesAndReturn = (type, value) => {
     if (type === "string") {
@@ -193,4 +287,4 @@ const useTranslation = (namespace) => {
         pageTranslations,
     };
 };
-export { initializeTranslations, pageTranslations, useTranslation };
+export { InitializeTranslations, pageTranslations, useTranslation };

@@ -1,33 +1,145 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {useEffect, useState, PropsWithChildren} from "react";
+
+import {useRouter} from "next/router";
+
 //@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
 
 const translationsConfig = {
+  defaultLocale: translationsConfigUser?.defaultLocale || "en",
+  errorPagePath: translationsConfigUser?.errorPagePath || "/404",
   componentNameToReplaced:
     translationsConfigUser?.componentNameToReplaced || "TComponent",
+  redirectForLoggedUser: translationsConfigUser?.redirectForLoggedUser || "/",
+  redirectForNoLoggedUser:
+    translationsConfigUser?.redirectForNoLoggedUser || "/",
+  sitesForLoggedUser: translationsConfigUser?.sitesForLoggedUser || [],
 };
 
-type IPageTranslationsType = {
+type TPageTranslations = {
   [key: string]: any;
 };
 
-type IType = "string" | "number" | "array" | "object" | "any";
+type TType = "string" | "number" | "array" | "object" | "any";
 
-type ICallbackType = {
+type TCallback = {
   textBefore: string | undefined;
   textComponent: string | undefined;
   textAfter: string | undefined;
 };
 
-let pageTranslations: IPageTranslationsType | null = null;
+type TInitializeTranslations = {
+  translations: TPageTranslations;
+  isLoggedUser?: boolean;
+};
+
+let pageTranslations: TPageTranslations | null = null;
 
 const resolvePath = (object: any, path: string, defaultValue = undefined) =>
   path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
 
-const initializeTranslations = (translations: IPageTranslationsType) => {
-  pageTranslations = translations;
+const InitializeTranslations = ({
+  translations,
+  isLoggedUser,
+}: PropsWithChildren<TInitializeTranslations>) => {
+  const [all, setAll] = useState<TPageTranslations | null>(
+    translations || null
+  );
+  const router = useRouter();
+
+  useEffect(() => {
+    setAll(translations);
+  }, [translations, router.route]);
+
+  useEffect(() => {
+    if (isLoggedUser === undefined || !router.isReady) {
+      return;
+    }
+
+    const actualPath = router.route;
+    const selectedLocale = router?.query?.locale as string | undefined;
+
+    const isLinkWithLocale = !!selectedLocale;
+    const linkLocale = selectedLocale ? `/${selectedLocale}` : "";
+    let linkWithoutLocale: string | undefined = "";
+    if (router.pathname.includes("[locale]")) {
+      const splitPathname = router.pathname.split("/[locale]");
+      linkWithoutLocale = splitPathname.at(1);
+    } else {
+      linkWithoutLocale = router.pathname;
+    }
+
+    const redirectLink = `${linkLocale}${linkWithoutLocale}`;
+
+    const isErrorPage = router.pathname === translationsConfig?.errorPagePath;
+
+    const isSiteForLoggedUser =
+      translationsConfig.sitesForLoggedUser.find((itemRoute: string) => {
+        if (isLinkWithLocale) {
+          if (
+            `${linkLocale}${itemRoute === "/" ? "" : itemRoute}` ===
+            redirectLink
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          if (itemRoute === linkWithoutLocale) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }) !== undefined;
+
+    if (isLoggedUser) {
+      if (isSiteForLoggedUser) {
+        if (!isLinkWithLocale) {
+          if (redirectLink !== actualPath) {
+            if (!isErrorPage) {
+              router.push(redirectLink);
+            }
+          }
+        }
+        return;
+      } else {
+        const linkRedirectOnSuccess = `${linkLocale}${translationsConfig.redirectForLoggedUser}`;
+
+        if (actualPath !== linkRedirectOnSuccess) {
+          if (!isErrorPage) {
+            router.push(linkRedirectOnSuccess);
+          }
+        }
+        return;
+      }
+    } else {
+      if (isSiteForLoggedUser) {
+        const linkRedirectOnFailure = `${linkLocale}${translationsConfig.redirectForNoLoggedUser}`;
+        if (actualPath !== linkRedirectOnFailure) {
+          if (!isErrorPage) {
+            router.push(linkRedirectOnFailure);
+          }
+        }
+        return;
+      } else {
+        if (!isLinkWithLocale) {
+          if (redirectLink !== actualPath) {
+            if (!isErrorPage) {
+              router.push(redirectLink);
+            }
+          }
+        }
+        return;
+      }
+    }
+  }, [isLoggedUser, router.asPath]);
+
+  pageTranslations = all;
 };
 
-const checkTypesAndReturn = (type: IType, value: any) => {
+const checkTypesAndReturn = (type: TType, value: any) => {
   if (type === "string") {
     if (typeof value === "string") {
       return value;
@@ -59,9 +171,9 @@ const checkTypesAndReturn = (type: IType, value: any) => {
 
 const generateTranslationWithType = (
   slug: string,
-  translationsNamespace: IPageTranslationsType | undefined,
+  translationsNamespace: TPageTranslations | undefined,
   namespace: string,
-  type: IType
+  type: TType
 ) => {
   if (!translationsNamespace) {
     console.log(`next-translations - fail load namespace: ${namespace}`);
@@ -128,7 +240,7 @@ const useTranslation = (namespace: string) => {
         );
         return undefined;
       },
-      tComponent: (slug: string, callback: ({}: ICallbackType) => any) => {
+      tComponent: (slug: string, callback: ({}: TCallback) => any) => {
         console.log(
           `next-translations - No detected translations for this page ${namespace}: ${slug}`
         );
@@ -143,7 +255,7 @@ const useTranslation = (namespace: string) => {
 
   const replacePathFromNamespace = namespace.replace(":", ".");
 
-  const translationsNamespace: IPageTranslationsType | undefined = resolvePath(
+  const translationsNamespace: TPageTranslations | undefined = resolvePath(
     pageTranslations,
     replacePathFromNamespace,
     undefined
@@ -194,7 +306,7 @@ const useTranslation = (namespace: string) => {
     );
   };
 
-  const tComponent = (slug = "", callback: ({}: ICallbackType) => any) => {
+  const tComponent = (slug = "", callback: ({}: TCallback) => any) => {
     const generatedText: string | undefined = generateTranslationWithType(
       slug,
       translationsNamespace,
@@ -289,4 +401,4 @@ const useTranslation = (namespace: string) => {
   };
 };
 
-export {initializeTranslations, pageTranslations, useTranslation};
+export {InitializeTranslations, pageTranslations, useTranslation};

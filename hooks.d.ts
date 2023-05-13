@@ -1,20 +1,25 @@
-type IPageTranslationsType = {
+import { PropsWithChildren } from "react";
+type TPageTranslations = {
     [key: string]: any;
 };
-type ICallbackType = {
+type TCallback = {
     textBefore: string | undefined;
     textComponent: string | undefined;
     textAfter: string | undefined;
 };
-declare let pageTranslations: IPageTranslationsType | null;
-declare const initializeTranslations: (translations: IPageTranslationsType) => void;
+type TInitializeTranslations = {
+    translations: TPageTranslations;
+    isLoggedUser?: boolean;
+};
+declare let pageTranslations: TPageTranslations | null;
+declare const InitializeTranslations: ({ translations, isLoggedUser, }: PropsWithChildren<TInitializeTranslations>) => void;
 declare const useTranslation: (namespace: string) => {
     t: (slug: string) => undefined;
     tString: (slug: string) => undefined;
     tNumber: (slug: string) => undefined;
     tArray: (slug: string) => undefined;
     tObject: (slug: string) => undefined;
-    tComponent: (slug: string, callback: ({}: ICallbackType) => any) => any;
+    tComponent: (slug: string, callback: ({}: TCallback) => any) => any;
     pageTranslations?: undefined;
 } | {
     t: (slug?: string) => any;
@@ -22,7 +27,7 @@ declare const useTranslation: (namespace: string) => {
     tNumber: (slug?: string) => number | undefined;
     tArray: (slug?: string) => any[] | undefined;
     tObject: (slug?: string) => object | undefined;
-    tComponent: (slug: string | undefined, callback: ({}: ICallbackType) => any) => any;
-    pageTranslations: IPageTranslationsType;
+    tComponent: (slug: string | undefined, callback: ({}: TCallback) => any) => any;
+    pageTranslations: TPageTranslations;
 };
-export { initializeTranslations, pageTranslations, useTranslation };
+export { InitializeTranslations, pageTranslations, useTranslation };

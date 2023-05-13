@@ -1,10 +1,11 @@
+import * as dotenv from "dotenv";
 import fse from "fs-extra";
 import fetch from "node-fetch";
-//@ts-ignore
-import translationsConfigUser from "../../translations.config.js";
-import * as dotenv from "dotenv";
+
 import path from "path";
 import {fileURLToPath} from "url";
+//@ts-ignore
+import translationsConfigUser from "../../translations.config.js";
 dotenv.config();
 
 const translationsConfig = {
@@ -12,7 +13,7 @@ const translationsConfig = {
   linkFetchTranslations: translationsConfigUser?.linkFetchTranslations,
   outputFolderTranslations:
     translationsConfigUser?.outputFolderTranslations || "/public/locales",
-  namespaces: translationsConfigUser?.namespaces || ["common"],
+  namespacesToFetch: translationsConfigUser?.namespacesToFetch || ["common"],
 };
 
 const fetchLanguages = async (language: string, namespace: string) => {
@@ -39,7 +40,7 @@ export const downloadLanguages = async () => {
     for (const lang of translationsConfig.locales) {
       const validLanguage = lang === "ua" ? "uk" : lang;
 
-      for (const namespace of translationsConfig.namespaces) {
+      for (const namespace of translationsConfig.namespacesToFetch) {
         const data = await fetchLanguages(validLanguage, namespace);
         if (data) {
           const folderPath = `../..${translationsConfig.outputFolderTranslations}/${lang}/${namespace}.json`;

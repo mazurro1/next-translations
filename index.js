@@ -7,11 +7,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-//@ts-ignore
-import translationsConfigUser from "../../translations.config.js";
 import fse from "fs-extra";
 import path from "path";
 import { fileURLToPath } from "url";
+//@ts-ignore
+import translationsConfigUser from "../../translations.config.js";
 const translationsConfig = {
     defaultLocale: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.defaultLocale) || "en",
     locales: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.locales) || ["en"],

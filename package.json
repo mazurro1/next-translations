@@ -28,7 +28,7 @@
     "static",
     "sites"
   ],
-  "version": "6.6.1",
+  "version": "7.0.0",
   "description": "Translations to NextJS app",
   "main": "./index.js",
   "type": "module",
@@ -39,15 +39,17 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "next": ">= 10.0.0",
-    "react": ">= 16.8.0"
+    "next": "^13.4.2",
+    "react": "^18.2.0"
   },
   "dependencies": {
+    "@types/react-dom": "^18.2.4",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.1.0",
     "node-fetch": "^3.3.0",
     "path": "^0.12.7",
+    "react-dom": "^18.2.0",
     "url": "^0.11.0"
   },
   "repository": {
@@ -55,6 +57,9 @@
     "url": "https://github.com/mazurro1/next-translations"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.1"
+    "@types/react-dom": "^18.2.4",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.1.3",
+    "@types/react": "^18.2.6"
   }
 }

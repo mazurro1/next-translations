@@ -1,10 +1,11 @@
-//@ts-ignore
-import translationsConfigUser from "../../translations.config.js";
 import fse from "fs-extra";
+
 import path from "path";
 import {fileURLToPath} from "url";
+//@ts-ignore
+import translationsConfigUser from "../../translations.config.js";
 
-type ITranslationConfigType = {
+type TTranslationConfig = {
   defaultLocale: string;
   locales: string[];
   outputFolderTranslations: string;
@@ -12,7 +13,7 @@ type ITranslationConfigType = {
   constNamespaces: string[];
 };
 
-const translationsConfig: ITranslationConfigType = {
+const translationsConfig: TTranslationConfig = {
   defaultLocale: translationsConfigUser?.defaultLocale || "en",
   locales: translationsConfigUser?.locales || ["en"],
   outputFolderTranslations:
