@@ -42,10 +42,10 @@ import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
 
-  // add this line if you want to use redirects: sitesForLoggedUser
+  // add this line
   initializeTranslations(pageProps?.translations);
 
-  // add this lint if you
+  // add this lint if you want to use redirects: sitesForLoggedUser
   InitializeRedirectsTranslations({
     isLoggedUser: true, // true or false for STATIC PAGES. Attention! if isLoggedUser is undefined then no redirects are performed!
     isLoggedUser: pageProps?.isLoggedUser || false, // for SERVER SIDE RENDERING pages. Attention! if isLoggedUser is undefined then no redirects are performed!
