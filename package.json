@@ -28,7 +28,7 @@
     "static",
     "sites"
   ],
-  "version": "7.1.1",
+  "version": "7.1.2",
   "description": "Translations to NextJS app",
   "main": "./index.js",
   "type": "module",
@@ -40,16 +40,15 @@
   "license": "MIT",
   "peerDependencies": {
     "next": "^13.0.0",
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@types/react-dom": "^18.2.4",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.1.0",
     "node-fetch": "^3.3.0",
     "path": "^0.12.7",
-    "react-dom": "^18.2.0",
     "url": "^0.11.0"
   },
   "repository": {
