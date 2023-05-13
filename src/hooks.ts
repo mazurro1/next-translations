@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {useEffect, useState, PropsWithChildren} from "react";
+import {useEffect, PropsWithChildren} from "react";
 
 import {useRouter} from "next/router";
 
@@ -31,7 +31,6 @@ type TCallback = {
 
 type TInitializeTranslations = {
   translations: TPageTranslations;
-  isLoggedUser?: boolean;
 };
 
 let pageTranslations: TPageTranslations | null = null;
@@ -39,18 +38,16 @@ let pageTranslations: TPageTranslations | null = null;
 const resolvePath = (object: any, path: string, defaultValue = undefined) =>
   path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
 
-const InitializeTranslations = ({
-  translations,
-  isLoggedUser,
-}: PropsWithChildren<TInitializeTranslations>) => {
-  const [all, setAll] = useState<TPageTranslations | null>(
-    translations || null
-  );
-  const router = useRouter();
+const initializeTranslations = (translations: TInitializeTranslations) => {
+  pageTranslations = translations;
+};
 
-  useEffect(() => {
-    setAll(translations);
-  }, [translations, router.route]);
+const InitializeRedirectsTranslations = ({
+  isLoggedUser,
+}: {
+  isLoggedUser: boolean;
+}) => {
+  const router = useRouter();
 
   useEffect(() => {
     if (isLoggedUser === undefined || !router.isReady) {
@@ -135,8 +132,6 @@ const InitializeTranslations = ({
       }
     }
   }, [isLoggedUser, router.asPath]);
-
-  pageTranslations = all;
 };
 
 const checkTypesAndReturn = (type: TType, value: any) => {
@@ -401,4 +396,9 @@ const useTranslation = (namespace: string) => {
   };
 };
 
-export {InitializeTranslations, pageTranslations, useTranslation};
+export {
+  initializeTranslations,
+  InitializeRedirectsTranslations,
+  pageTranslations,
+  useTranslation,
+};

@@ -1,4 +1,3 @@
-import { PropsWithChildren } from "react";
 type TPageTranslations = {
     [key: string]: any;
 };
@@ -9,10 +8,12 @@ type TCallback = {
 };
 type TInitializeTranslations = {
     translations: TPageTranslations;
-    isLoggedUser?: boolean;
 };
 declare let pageTranslations: TPageTranslations | null;
-declare const InitializeTranslations: ({ translations, isLoggedUser, }: PropsWithChildren<TInitializeTranslations>) => void;
+declare const initializeTranslations: (translations: TInitializeTranslations) => void;
+declare const InitializeRedirectsTranslations: ({ isLoggedUser, }: {
+    isLoggedUser: boolean;
+}) => void;
 declare const useTranslation: (namespace: string) => {
     t: (slug: string) => undefined;
     tString: (slug: string) => undefined;
@@ -30,4 +31,4 @@ declare const useTranslation: (namespace: string) => {
     tComponent: (slug: string | undefined, callback: ({}: TCallback) => any) => any;
     pageTranslations: TPageTranslations;
 };
-export { InitializeTranslations, pageTranslations, useTranslation };
+export { initializeTranslations, InitializeRedirectsTranslations, pageTranslations, useTranslation, };

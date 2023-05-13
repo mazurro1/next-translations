@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 //@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
@@ -13,12 +13,11 @@ const translationsConfig = {
 };
 let pageTranslations = null;
 const resolvePath = (object, path, defaultValue = undefined) => path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
-const InitializeTranslations = ({ translations, isLoggedUser, }) => {
-    const [all, setAll] = useState(translations || null);
+const initializeTranslations = (translations) => {
+    pageTranslations = translations;
+};
+const InitializeRedirectsTranslations = ({ isLoggedUser, }) => {
     const router = useRouter();
-    useEffect(() => {
-        setAll(translations);
-    }, [translations, router.route]);
     useEffect(() => {
         var _a;
         if (isLoggedUser === undefined || !router.isReady) {
@@ -100,7 +99,6 @@ const InitializeTranslations = ({ translations, isLoggedUser, }) => {
             }
         }
     }, [isLoggedUser, router.asPath]);
-    pageTranslations = all;
 };
 const checkTypesAndReturn = (type, value) => {
     if (type === "string") {
@@ -287,4 +285,4 @@ const useTranslation = (namespace) => {
         pageTranslations,
     };
 };
-export { InitializeTranslations, pageTranslations, useTranslation };
+export { initializeTranslations, InitializeRedirectsTranslations, pageTranslations, useTranslation, };

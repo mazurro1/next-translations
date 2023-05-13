@@ -14,11 +14,12 @@ npm i next-translations
 | :---------------------------- | :----------------------------------------------------------------- | :------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defaultLocale`               | `string`                                                           | `'en'`              | **Required**. The default language on your site                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `locales`                     | `string[]`                                                         | `['en']`            | **Required**. All available languages on your website.                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `sitesForLoggedUser`          | `string[]`                                                         | `[]`                | All available tracks ONLY for the active session                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `outputFolderTranslations`    | `string`                                                           | `'/public/locales'` | The path to your translations. **NOTE**: If you download translations using next-translations, they will be saved to the given address. For the site to work properly, they **must be** in the `/public` folder.                                                                                                                                                                                                                                                                                                                   |
 | `languageWithoutMultirouting` | `string`                                                           | `undefined`         | The language to be excluded from multi routing. For example, we want /index.js to have the language **"pl" by default**, then it should be substituted into this variable. Other languages (if any) will be available in `/pages/[locale]`                                                                                                                                                                                                                                                                                         |
 | `constNamespaces`             | `string[]`                                                         | `['common']`        | These are all the namespaces we use throughout the project so as not to define them on every page.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `namespaces`                  | `string[]`                                                         | `['common']`        | All the namespaces we use in our repository.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `componentNameToReplaced`     | `string`                                                           | `'TComponent'`      | The name of the component in translations that will be captured and replaced in tComponent.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `namespacesToFetch`           | `string[]`                                                         | `['common']`        | All the namespaces you want to fetch during link Fetch Translations                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | `linkFetchTranslations`       | `(version: string, language: string, namespace: string) => string` | `undefined`         | A function to download our translations **from the api**. It is called every time it wants to load a given translation in a given language and namespace. The function returns single values that we entered in the fields: `locales`, `namespaces`. To return, we need to return a link to our api, e.g. **return** `https://your-api-to-download-translations/${version}/${language}/${namespace}` Note: if you add FLEX_PUBLIC_APP_ENV to your .env file then you can access the version of the page, e.g.: dev, int, prd etc.. |
 
 ## configuration
@@ -41,8 +42,14 @@ import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
 
-  // add this line
+  // add this line if you want to use redirects: sitesForLoggedUser
   initializeTranslations(pageProps?.translations);
+
+  // add this lint if you
+  InitializeRedirectsTranslations({
+    isLoggedUser: true, // true or false for STATIC PAGES
+    isLoggedUser: pageProps?.isLoggedUser || false, // for SERVER SIDE RENDERING pages
+  });
 
   return (
     <main>
@@ -135,6 +142,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   return {
     props: {
       ...translatesProps,
+      isLoggedUser: true, // or false, add this prop if you want to use redirects: sitesForLoggedUser
     },
   };
 };
@@ -236,6 +244,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   return {
     props: {
       ...translatesProps,
+      isLoggedUser: true, // or false, add this prop if you want to use redirects: sitesForLoggedUser
     },
   };
 };
