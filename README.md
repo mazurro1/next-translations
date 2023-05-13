@@ -47,8 +47,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
   // add this lint if you
   InitializeRedirectsTranslations({
-    isLoggedUser: true, // true or false for STATIC PAGES
-    isLoggedUser: pageProps?.isLoggedUser || false, // for SERVER SIDE RENDERING pages
+    isLoggedUser: true, // true or false for STATIC PAGES. Attention! if isLoggedUser is undefined then no redirects are performed!
+    isLoggedUser: pageProps?.isLoggedUser || false, // for SERVER SIDE RENDERING pages. Attention! if isLoggedUser is undefined then no redirects are performed!
   });
 
   return (
