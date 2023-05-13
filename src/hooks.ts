@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {useEffect, PropsWithChildren} from "react";
+import {useEffect} from "react";
 
 import {useRouter} from "next/router";
 
@@ -15,6 +15,8 @@ const translationsConfig = {
   redirectForNoLoggedUser:
     translationsConfigUser?.redirectForNoLoggedUser || "/",
   sitesForLoggedUser: translationsConfigUser?.sitesForLoggedUser || [],
+  defaultLocaleWithoutMultirouting:
+    translationsConfigUser?.defaultLocaleWithoutMultirouting || false,
 };
 
 type TPageTranslations = {
@@ -56,10 +58,17 @@ const InitializeRedirectsTranslations = ({
 
     const actualPath = router.route;
     const selectedLocale = router?.query?.locale as string | undefined;
+    const defaultLocaleWithoutMultirouting: boolean =
+      translationsConfig.defaultLocaleWithoutMultirouting;
 
-    const isLinkWithLocale = !!selectedLocale;
-    const linkLocale = selectedLocale ? `/${selectedLocale}` : "";
+    const linkLocale = selectedLocale
+      ? `/${selectedLocale}`
+      : defaultLocaleWithoutMultirouting
+      ? ""
+      : `/${translationsConfig.defaultLocale}`;
+
     let linkWithoutLocale: string | undefined = "";
+
     if (router.pathname.includes("[locale]")) {
       const splitPathname = router.pathname.split("/[locale]");
       linkWithoutLocale = splitPathname.at(1);
@@ -73,7 +82,7 @@ const InitializeRedirectsTranslations = ({
 
     const isSiteForLoggedUser =
       translationsConfig.sitesForLoggedUser.find((itemRoute: string) => {
-        if (isLinkWithLocale) {
+        if (!!linkLocale) {
           if (
             `${linkLocale}${itemRoute === "/" ? "" : itemRoute}` ===
             redirectLink
@@ -93,7 +102,7 @@ const InitializeRedirectsTranslations = ({
 
     if (isLoggedUser) {
       if (isSiteForLoggedUser) {
-        if (!isLinkWithLocale) {
+        if (!!!linkLocale) {
           if (redirectLink !== actualPath) {
             if (!isErrorPage) {
               router.push(redirectLink);
@@ -121,7 +130,7 @@ const InitializeRedirectsTranslations = ({
         }
         return;
       } else {
-        if (!isLinkWithLocale) {
+        if (!!!linkLocale) {
           if (redirectLink !== actualPath) {
             if (!isErrorPage) {
               router.push(redirectLink);
@@ -131,7 +140,7 @@ const InitializeRedirectsTranslations = ({
         return;
       }
     }
-  }, [isLoggedUser, router.asPath]);
+  }, [isLoggedUser, router.asPath, translationsConfig]);
 };
 
 const checkTypesAndReturn = (type: TType, value: any) => {
