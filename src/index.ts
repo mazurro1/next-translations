@@ -9,7 +9,7 @@ type TTranslationConfig = {
   defaultLocale: string;
   locales: string[];
   outputFolderTranslations: string;
-  defaultLocaleWithoutMultirouting?: boolean;
+  defaultLocaleWithMultirouting?: boolean;
   constNamespaces: string[];
 };
 
@@ -18,8 +18,8 @@ const translationsConfig: TTranslationConfig = {
   locales: translationsConfigUser?.locales || ["en"],
   outputFolderTranslations:
     translationsConfigUser?.outputFolderTranslations || "/public/locales",
-  defaultLocaleWithoutMultirouting:
-    translationsConfigUser?.defaultLocaleWithoutMultirouting || false,
+  defaultLocaleWithMultirouting:
+    translationsConfigUser?.defaultLocaleWithMultirouting,
   constNamespaces: translationsConfigUser?.constNamespaces || ["common"],
 };
 
@@ -79,9 +79,9 @@ async function getTranslationsProps(ctx: any, ns: string[] = []) {
 }
 
 const getPaths = () => {
-  return (allTranslationsLanguages as string[])
+  return translationsConfig.locales
     .filter((item) => {
-      if (translationsConfig.defaultLocaleWithoutMultirouting) {
+      if (!translationsConfig.defaultLocaleWithMultirouting) {
         return item !== translationsConfig.defaultLocale;
       } else {
         return true;

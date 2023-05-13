@@ -15,8 +15,8 @@ const translationsConfig = {
   redirectForNoLoggedUser:
     translationsConfigUser?.redirectForNoLoggedUser || "/",
   sitesForLoggedUser: translationsConfigUser?.sitesForLoggedUser || [],
-  defaultLocaleWithoutMultirouting:
-    translationsConfigUser?.defaultLocaleWithoutMultirouting || false,
+  defaultLocaleWithMultirouting:
+    translationsConfigUser?.defaultLocaleWithMultirouting,
 };
 
 type TPageTranslations = {
@@ -58,14 +58,14 @@ const InitializeRedirectsTranslations = ({
 
     const actualPath = router.route;
     const selectedLocale = router?.query?.locale as string | undefined;
-    const defaultLocaleWithoutMultirouting: boolean =
-      translationsConfig.defaultLocaleWithoutMultirouting;
+    const defaultLocaleWithMultirouting: boolean =
+      translationsConfig.defaultLocaleWithMultirouting;
 
     const linkLocale = selectedLocale
       ? `/${selectedLocale}`
-      : defaultLocaleWithoutMultirouting
-      ? ""
-      : `/${translationsConfig.defaultLocale}`;
+      : defaultLocaleWithMultirouting
+      ? `/${translationsConfig.defaultLocale}`
+      : "";
 
     let linkWithoutLocale: string | undefined = "";
 
