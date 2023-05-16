@@ -50,7 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
   InitializeRedirectsTranslations({
     isLoggedUser: true, // true or false for STATIC PAGES. Attention! if isLoggedUser is undefined then no redirects are performed!
     isLoggedUser: pageProps?.isLoggedUser || false, // for SERVER SIDE RENDERING pages. Attention! if isLoggedUser is undefined then no redirects are performed!
-    isUserInitialized: false, // default is false. Checks if routing can be done on the page. If it's false, it doesn't do routing.
+    isUserInitialized: true, // default is true. Checks if routing can be done on the page. If it's false, it doesn't do routing.
   });
 
   //example

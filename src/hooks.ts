@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {useEffect} from "react";
 
@@ -19,7 +20,7 @@ const translationsConfig = {
     translationsConfigUser?.defaultLocaleWithMultirouting,
 };
 
-type TPageTranslations = {
+export type TPageTranslations = {
   [key: string]: any;
 };
 
@@ -62,7 +63,7 @@ export type TtComponent =
 let pageTranslations: TPageTranslations | null = null;
 
 const resolvePath = (object: any, path: string, defaultValue = undefined) =>
-  path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
+  path.split(".").reduce((o, p) => o?.[p] ?? defaultValue, object);
 
 const initializeTranslations = (translations: TInitializeTranslations) => {
   pageTranslations = translations;
@@ -78,7 +79,7 @@ const InitializeRedirectsTranslations = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoggedUser === undefined || !router.isReady || !isUserInitialized) {
+    if (!router.isReady || !isUserInitialized) {
       return;
     }
 
@@ -163,7 +164,7 @@ const InitializeRedirectsTranslations = ({
         return;
       }
     }
-  }, [isLoggedUser, router.asPath, translationsConfig]);
+  }, [isLoggedUser, router.asPath, translationsConfig, isUserInitialized]);
 };
 
 const checkTypesAndReturn = (type: TType, value: any) => {
@@ -198,14 +199,24 @@ const checkTypesAndReturn = (type: TType, value: any) => {
 
 const generateTranslationWithType = (
   slug: string,
-  translationsNamespace: TPageTranslations | undefined,
   namespace: string,
   type: TType
 ) => {
-  if (!translationsNamespace) {
-    console.log(`next-translations - fail load namespace: ${namespace}`);
+  const replacePathFromNamespace = namespace.replace(":", ".");
+
+  if (!pageTranslations) {
+    console.log(
+      `next-translations - No detected translations for this page ${namespace}: ${slug}`
+    );
     return undefined;
   }
+
+  const translationsNamespace: TPageTranslations | undefined = resolvePath(
+    pageTranslations,
+    replacePathFromNamespace,
+    undefined
+  );
+
   const replaceSlugPathFromNamespace = slug.replace(":", ".");
 
   const pathTranslated = resolvePath(
@@ -235,42 +246,35 @@ const generateTranslationWithType = (
 };
 
 const useTranslation = (namespace: string) => {
-  if (!pageTranslations) {
+  const replacePathFromNamespace = namespace.replace(":", ".");
+
+  const translationsNamespace: TPageTranslations | undefined = resolvePath(
+    pageTranslations,
+    replacePathFromNamespace,
+    undefined
+  );
+
+  if (!translationsNamespace) {
+    console.log(
+      `next-translations - fail load namespace: ${namespace}. Probably that the given namespace is missing from the folder in your namespaces or it is spelled incorrectly. Another reason may be the translations have been cached and need to refresh the page!`
+    );
     return {
-      t: (slug: string) => {
-        console.log(
-          `next-translations - No detected translations for this page ${namespace}: ${slug}`
-        );
+      t: () => {
         return undefined;
       },
-      tString: (slug: string) => {
-        console.log(
-          `next-translations - No detected translations for this page ${namespace}: ${slug}`
-        );
+      tString: () => {
         return undefined;
       },
-      tNumber: (slug: string) => {
-        console.log(
-          `next-translations - No detected translations for this page ${namespace}: ${slug}`
-        );
+      tNumber: () => {
         return undefined;
       },
-      tArray: (slug: string) => {
-        console.log(
-          `next-translations - No detected translations for this page ${namespace}: ${slug}`
-        );
+      tArray: () => {
         return undefined;
       },
-      tObject: (slug: string) => {
-        console.log(
-          `next-translations - No detected translations for this page ${namespace}: ${slug}`
-        );
+      tObject: () => {
         return undefined;
       },
-      tComponent: (slug: string, callback: ({}: TCallback) => any) => {
-        console.log(
-          `next-translations - No detected translations for this page ${namespace}: ${slug}`
-        );
+      tComponent: (_slug: string, callback: ({}: TCallback) => any) => {
         return callback({
           textBefore: undefined,
           textComponent: undefined,
@@ -280,63 +284,32 @@ const useTranslation = (namespace: string) => {
     };
   }
 
-  const replacePathFromNamespace = namespace.replace(":", ".");
-
-  const translationsNamespace: TPageTranslations | undefined = resolvePath(
-    pageTranslations,
-    replacePathFromNamespace,
-    undefined
-  );
-
-  const t = (slug = ""): any => {
-    return generateTranslationWithType(
-      slug,
-      translationsNamespace,
-      namespace,
-      "any"
-    );
+  const t: Tt = (slug = ""): any => {
+    return generateTranslationWithType(slug, namespace, "any");
   };
 
-  const tString = (slug = ""): string | undefined => {
-    return generateTranslationWithType(
-      slug,
-      translationsNamespace,
-      namespace,
-      "string"
-    );
+  const tString: TtString = (slug = ""): string | undefined => {
+    return generateTranslationWithType(slug, namespace, "string");
   };
 
-  const tNumber = (slug = ""): number | undefined => {
-    return generateTranslationWithType(
-      slug,
-      translationsNamespace,
-      namespace,
-      "number"
-    );
+  const tNumber: TtNumber = (slug = ""): number | undefined => {
+    return generateTranslationWithType(slug, namespace, "number");
   };
 
-  const tArray = (slug = ""): any[] | undefined => {
-    return generateTranslationWithType(
-      slug,
-      translationsNamespace,
-      namespace,
-      "array"
-    );
+  const tArray: TtArray = (slug = ""): any[] | undefined => {
+    return generateTranslationWithType(slug, namespace, "array");
   };
 
-  const tObject = (slug = ""): object | undefined => {
-    return generateTranslationWithType(
-      slug,
-      translationsNamespace,
-      namespace,
-      "object"
-    );
+  const tObject: TtObject = (slug = ""): object | undefined => {
+    return generateTranslationWithType(slug, namespace, "object");
   };
 
-  const tComponent = (slug = "", callback: ({}: TCallback) => any) => {
+  const tComponent: TtComponent = (
+    slug = "",
+    callback: ({}: TCallback) => any
+  ) => {
     const generatedText: string | undefined = generateTranslationWithType(
       slug,
-      translationsNamespace,
       namespace,
       "string"
     );

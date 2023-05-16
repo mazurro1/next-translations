@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as dotenv from "dotenv";
 import fse from "fs-extra";
 import fetch from "node-fetch";
 
 import path from "path";
 import {fileURLToPath} from "url";
-//@ts-ignore
+
+// @ts-ignore
 import translationsConfigUser from "../../translations.config.js";
 dotenv.config();
 
@@ -38,10 +40,8 @@ export const downloadLanguages = async () => {
 
   try {
     for (const lang of translationsConfig.locales) {
-      const validLanguage = lang === "ua" ? "uk" : lang;
-
       for (const namespace of translationsConfig.namespacesToFetch) {
-        const data = await fetchLanguages(validLanguage, namespace);
+        const data = await fetchLanguages(lang, namespace);
         if (data) {
           const folderPath = `../..${translationsConfig.outputFolderTranslations}/${lang}/${namespace}.json`;
           const pathToFile = path.resolve(__dirname, folderPath);

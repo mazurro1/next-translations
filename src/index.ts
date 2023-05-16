@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import fse from "fs-extra";
 
 import path from "path";
 import {fileURLToPath} from "url";
+
 //@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
+
+import type {TPageTranslations} from "./hooks";
 
 type TTranslationConfig = {
   defaultLocale: string;
@@ -31,9 +36,14 @@ const getTranslationsFromFiles = async (
 ) => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  let translations = {};
+  const translations: TPageTranslations = {};
+
+  const uniqueArray = ns.filter((value, index, self) => {
+    return self.indexOf(value) === index && !!value;
+  });
+
   try {
-    for (const namespace of ns) {
+    for (const namespace of uniqueArray) {
       const folderPath = `../..${translationsConfig.outputFolderTranslations}/${locale}/${namespace}.json`;
       const pathToFile = path.resolve(__dirname, folderPath);
       const exists = await fse.pathExists(pathToFile);
@@ -41,7 +51,7 @@ const getTranslationsFromFiles = async (
       if (exists) {
         const translationsJson = await fse.readJson(pathToFile);
         if (translationsJson) {
-          translations = {...translations, [namespace]: translationsJson};
+          translations[namespace] = translationsJson;
         }
       } else {
         console.error("Path not found!!!");
@@ -75,6 +85,7 @@ async function getTranslationsProps(ctx: any, ns: string[] = []) {
       ...defaultNamespacesToUseInAllPages,
     ])),
   };
+
   return props;
 }
 
