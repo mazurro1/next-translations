@@ -37,7 +37,7 @@ npm i next-translations
 **/pages/\_app.tsx** for **STATIC SITES** and **SERVER SIDE RENDERING**
 
 ```bash
-import { initializeTranslations } from "next-translations/hooks";
+import { initializeTranslations, InitializeRedirectsTranslations } from "next-translations/hooks";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -45,10 +45,18 @@ export default function App({ Component, pageProps }: AppProps) {
   // add this line
   initializeTranslations(pageProps?.translations);
 
-  // add this lint if you want to use redirects: sitesForLoggedUser. You can add this in user context for example.
+  // add this lint if you want to use redirects: sitesForLoggedUser.
+  // You can add this in user context for example.
   InitializeRedirectsTranslations({
     isLoggedUser: true, // true or false for STATIC PAGES. Attention! if isLoggedUser is undefined then no redirects are performed!
     isLoggedUser: pageProps?.isLoggedUser || false, // for SERVER SIDE RENDERING pages. Attention! if isLoggedUser is undefined then no redirects are performed!
+    isUserInitialized: false, // default is false. Checks if routing can be done on the page. If it's false, it doesn't do routing.
+  });
+
+  //example
+  InitializeRedirectsTranslations({
+    isLoggedUser: !!user,
+    isUserInitialized: user !== undefined,
   });
 
   return (
@@ -290,6 +298,19 @@ tComponent(
   },
 );
 
+```
+
+**Avaible types**
+
+```bash
+// import type {Tt, TtString, TtNumber, TtArray, TtObject, TtComponent} from "next-translations/hooks"
+
+- Tt
+- TtString
+- TtNumber
+- TtArray
+- TtObject
+- TtComponent
 ```
 
 **package.json**

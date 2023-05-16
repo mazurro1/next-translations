@@ -35,6 +35,30 @@ type TInitializeTranslations = {
   translations: TPageTranslations;
 };
 
+export type Tt =
+  | ((slug: string) => undefined)
+  | ((slug?: string | undefined) => any | undefined);
+
+export type TtString =
+  | ((slug: string) => undefined)
+  | ((slug?: string | undefined) => string | undefined);
+
+export type TtNumber =
+  | ((slug: string) => undefined)
+  | ((slug?: string | undefined) => number | undefined);
+
+export type TtArray =
+  | ((slug: string) => undefined)
+  | ((slug?: string | undefined) => any[] | undefined);
+
+export type TtObject =
+  | ((slug: string) => undefined)
+  | ((slug?: string | undefined) => object | undefined);
+
+export type TtComponent =
+  | ((slug: string, callback: ({}: TCallback) => any) => any)
+  | ((slug: string | undefined, callback: ({}: TCallback) => any) => any);
+
 let pageTranslations: TPageTranslations | null = null;
 
 const resolvePath = (object: any, path: string, defaultValue = undefined) =>
@@ -46,13 +70,15 @@ const initializeTranslations = (translations: TInitializeTranslations) => {
 
 const InitializeRedirectsTranslations = ({
   isLoggedUser,
+  isUserInitialized = false,
 }: {
   isLoggedUser: boolean;
+  isUserInitialized: boolean;
 }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoggedUser === undefined || !router.isReady) {
+    if (isLoggedUser === undefined || !router.isReady || !isUserInitialized) {
       return;
     }
 
