@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {useEffect} from "react";
-
-import {useRouter} from "next/router";
 
 //@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
@@ -67,104 +64,6 @@ const resolvePath = (object: any, path: string, defaultValue = undefined) =>
 
 const initializeTranslations = (translations: TInitializeTranslations) => {
   pageTranslations = translations;
-};
-
-const InitializeRedirectsTranslations = ({
-  isLoggedUser,
-  isUserInitialized = false,
-}: {
-  isLoggedUser: boolean;
-  isUserInitialized: boolean;
-}) => {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!router.isReady || !isUserInitialized) {
-      return;
-    }
-
-    const actualPath = router.route;
-    const selectedLocale = router?.query?.locale as string | undefined;
-    const defaultLocaleWithMultirouting: boolean =
-      translationsConfig.defaultLocaleWithMultirouting;
-
-    const linkLocale = selectedLocale
-      ? `/${selectedLocale}`
-      : defaultLocaleWithMultirouting
-      ? `/${translationsConfig.defaultLocale}`
-      : "";
-
-    let linkWithoutLocale: string | undefined = "";
-
-    if (router.pathname.includes("[locale]")) {
-      const splitPathname = router.pathname.split("/[locale]");
-      linkWithoutLocale = splitPathname.at(1);
-    } else {
-      linkWithoutLocale =
-        router.pathname === "/" && !!linkLocale ? "" : router.pathname;
-    }
-
-    const redirectLink = `${linkLocale}${linkWithoutLocale}`;
-
-    const isErrorPage = router.pathname === translationsConfig?.errorPagePath;
-
-    const isSiteForLoggedUser =
-      translationsConfig.sitesForLoggedUser.find((itemRoute: string) => {
-        if (!!linkLocale) {
-          if (
-            `${linkLocale}${itemRoute === "/" ? "" : itemRoute}` ===
-            redirectLink
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          if (itemRoute === linkWithoutLocale) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }) !== undefined;
-
-    if (isLoggedUser) {
-      if (isSiteForLoggedUser) {
-        if (redirectLink !== actualPath) {
-          if (!isErrorPage) {
-            router.push(redirectLink);
-          }
-        }
-        return;
-      } else {
-        const linkRedirectOnSuccess = `${linkLocale}${translationsConfig.redirectForLoggedUser}`;
-
-        if (actualPath !== linkRedirectOnSuccess) {
-          if (!isErrorPage) {
-            router.push(linkRedirectOnSuccess);
-          }
-        }
-        return;
-      }
-    } else {
-      if (isSiteForLoggedUser) {
-        const linkRedirectOnFailure = `${linkLocale}${translationsConfig.redirectForNoLoggedUser}`;
-        if (actualPath !== linkRedirectOnFailure) {
-          if (!isErrorPage) {
-            router.push(linkRedirectOnFailure);
-          }
-        }
-        return;
-      } else {
-        if (redirectLink !== actualPath) {
-          if (!isErrorPage) {
-            router.push(redirectLink);
-          }
-        }
-        return;
-      }
-    }
-  }, [isLoggedUser, router.asPath, translationsConfig, isUserInitialized]);
 };
 
 const checkTypesAndReturn = (type: TType, value: any) => {
@@ -401,9 +300,4 @@ const useTranslation = (namespace: string) => {
   };
 };
 
-export {
-  initializeTranslations,
-  InitializeRedirectsTranslations,
-  pageTranslations,
-  useTranslation,
-};
+export {initializeTranslations, pageTranslations, useTranslation};
