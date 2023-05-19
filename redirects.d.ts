@@ -5,9 +5,9 @@ type TCheckRedirect = {
     locale: string | undefined;
     router: NextRouter;
 };
-declare const InitializeRedirectsTranslations: ({ isLoggedUser, active, }: {
+declare const InitializeRedirectsTranslations: ({ isLoggedUser, enable, }: {
     isLoggedUser: boolean;
-    active: boolean;
+    enable: boolean;
 }) => void;
 declare const validLink: ({ isLoggedUser, path, locale, router }: TCheckRedirect) => string;
 export { InitializeRedirectsTranslations, validLink };

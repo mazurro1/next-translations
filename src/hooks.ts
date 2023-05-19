@@ -10,8 +10,8 @@ const translationsConfig = {
   componentNameToReplaced:
     translationsConfigUser?.componentNameToReplaced || "TComponent",
   redirectForLoggedUser: translationsConfigUser?.redirectForLoggedUser || "/",
-  redirectForNoLoggedUser:
-    translationsConfigUser?.redirectForNoLoggedUser || "/",
+  redirectForNotLoggedUser:
+    translationsConfigUser?.redirectForNotLoggedUser || "/",
   sitesForLoggedUser: translationsConfigUser?.sitesForLoggedUser || [],
   defaultLocaleWithMultirouting:
     translationsConfigUser?.defaultLocaleWithMultirouting,

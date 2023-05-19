@@ -8,7 +8,7 @@ const translationsConfig = {
     errorPagePath: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.errorPagePath) || "/404",
     componentNameToReplaced: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.componentNameToReplaced) || "TComponent",
     redirectForLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.redirectForLoggedUser) || "/",
-    redirectForNoLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.redirectForNoLoggedUser) || "/",
+    redirectForNotLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.redirectForNotLoggedUser) || "/",
     sitesForLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.sitesForLoggedUser) || [],
     sitedForLoggedAndNotLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.sitedForLoggedAndNotLoggedUser) || [],
     defaultLocaleWithMultirouting: translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.defaultLocaleWithMultirouting,
@@ -21,6 +21,14 @@ var ERedirect;
     ERedirect["siteNotForLoggedUser_pathForLoggedUser"] = "siteNotForLoggedUser_pathForLoggedUser";
     ERedirect["siteNotForLoggedUser_pathNotForLoggedUser"] = "siteNotForLoggedUser_pathNotForLoggedUser";
 })(ERedirect || (ERedirect = {}));
+const validLinkWithLocale = (locale, path) => {
+    if (locale) {
+        return `${locale}${path === "/" ? "" : path}`;
+    }
+    else {
+        return `${path}`;
+    }
+};
 const checkRedirects = ({ isLoggedUser, path = "", locale, router, }) => {
     var _a;
     const selectedLocale = locale !== null && locale !== void 0 ? locale : (_a = router === null || router === void 0 ? void 0 : router.query) === null || _a === void 0 ? void 0 : _a.locale;
@@ -30,10 +38,10 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, }) => {
         : defaultLocaleWithMultirouting
             ? `/${translationsConfig.defaultLocale}`
             : "";
-    const redirectLink = `${linkLocale}${linkLocale ? (path === "/" ? "" : path) : path}`;
+    const redirectLink = validLinkWithLocale(linkLocale, path);
     const isSiteForLoggedUser = translationsConfig.sitesForLoggedUser.find((itemRoute) => {
         if (!!linkLocale) {
-            if (`${linkLocale}${itemRoute === "/" ? "" : itemRoute}` === redirectLink) {
+            if (validLinkWithLocale(linkLocale, itemRoute) === redirectLink) {
                 return true;
             }
             else {
@@ -51,8 +59,7 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, }) => {
     }) !== undefined;
     const isSiteForLoggedAndNotLoggedUser = translationsConfig.sitedForLoggedAndNotLoggedUser.find((itemRoute) => {
         if (!!linkLocale) {
-            if (`${linkLocale}${itemRoute === "/" ? "" : itemRoute}` ===
-                redirectLink) {
+            if (validLinkWithLocale(linkLocale, itemRoute) === redirectLink) {
                 return true;
             }
             else {
@@ -82,11 +89,7 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, }) => {
             };
         }
         else {
-            const linkRedirectOnSuccess = `${linkLocale}${linkLocale
-                ? translationsConfig.redirectForLoggedUser === "/"
-                    ? ""
-                    : translationsConfig.redirectForLoggedUser
-                : translationsConfig.redirectForLoggedUser}`;
+            const linkRedirectOnSuccess = validLinkWithLocale(linkLocale, translationsConfig.redirectForLoggedUser);
             return {
                 value: ERedirect.siteForLoggedUser_pathNotForLoggedUser,
                 path: linkRedirectOnSuccess,
@@ -95,9 +98,7 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, }) => {
     }
     else {
         if (isSiteForLoggedUser) {
-            const linkRedirectOnFailure = `${linkLocale}${translationsConfig.redirectForNoLoggedUser === "/"
-                ? ""
-                : translationsConfig.redirectForNoLoggedUser}`;
+            const linkRedirectOnFailure = validLinkWithLocale(linkLocale, translationsConfig.redirectForNotLoggedUser);
             return {
                 value: ERedirect.siteNotForLoggedUser_pathForLoggedUser,
                 path: linkRedirectOnFailure,
@@ -111,10 +112,10 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, }) => {
         }
     }
 };
-const InitializeRedirectsTranslations = ({ isLoggedUser, active = true, }) => {
+const InitializeRedirectsTranslations = ({ isLoggedUser, enable = true, }) => {
     const router = useRouter();
     useEffect(() => {
-        if (!router.isReady || !active) {
+        if (!router.isReady || !enable) {
             return;
         }
         const isErrorPage = router.pathname === (translationsConfig === null || translationsConfig === void 0 ? void 0 : translationsConfig.errorPagePath);
@@ -127,6 +128,9 @@ const InitializeRedirectsTranslations = ({ isLoggedUser, active = true, }) => {
             const selectedPath = splitPathname.at(1);
             if (selectedPath) {
                 linkWithoutLocale = selectedPath;
+            }
+            else {
+                linkWithoutLocale = "/";
             }
         }
         else {
@@ -142,7 +146,7 @@ const InitializeRedirectsTranslations = ({ isLoggedUser, active = true, }) => {
             router.push(result.path);
         }
         return;
-    }, [isLoggedUser, router.asPath, translationsConfig, active]);
+    }, [isLoggedUser, router.asPath, translationsConfig, enable]);
 };
 const validLink = ({ isLoggedUser, path, locale, router }) => {
     const defaultLocaleWithMultirouting = translationsConfig.defaultLocaleWithMultirouting;
