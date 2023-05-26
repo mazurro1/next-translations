@@ -34,6 +34,17 @@ type TCheckRedirect = {
   path: string;
   locale: string | undefined;
   router: NextRouter;
+  query: string;
+  hash: string;
+};
+
+type TValidLinks = {
+  isLoggedUser: boolean;
+  path?: string;
+  locale: string | undefined;
+  router: NextRouter;
+  query?: string;
+  hash?: string;
 };
 
 const validLinkWithLocale = (locale: string, path: string) => {
@@ -44,11 +55,25 @@ const validLinkWithLocale = (locale: string, path: string) => {
   }
 };
 
+const addQueryAndHashToLink = (link: string, query: string, hash: string) => {
+  if (query && hash) {
+    return `${link === "" ? "/" : link}?${query}#${hash}`;
+  } else if (query) {
+    return `${link === "" ? "/" : link}?${query}`;
+  } else if (hash) {
+    return `${link === "" ? "/" : link}#${hash}`;
+  } else {
+    return link;
+  }
+};
+
 const checkRedirects = ({
   isLoggedUser,
   path = "",
   locale,
   router,
+  query = "",
+  hash = "",
 }: TCheckRedirect) => {
   const selectedLocale =
     locale ?? (router?.query?.locale as string | undefined);
@@ -61,7 +86,11 @@ const checkRedirects = ({
     ? `/${translationsConfig.defaultLocale}`
     : "";
 
-  const redirectLink = validLinkWithLocale(linkLocale, path);
+  const redirectLink = addQueryAndHashToLink(
+    validLinkWithLocale(linkLocale, path),
+    query,
+    hash
+  );
 
   const isSiteForLoggedUser =
     translationsConfig.sitesForLoggedUser.find((itemRoute: string) => {
@@ -114,9 +143,13 @@ const checkRedirects = ({
         path: redirectLink,
       };
     } else {
-      const linkRedirectOnSuccess = validLinkWithLocale(
-        linkLocale,
-        translationsConfig.redirectForLoggedUser
+      const linkRedirectOnSuccess = addQueryAndHashToLink(
+        validLinkWithLocale(
+          linkLocale,
+          translationsConfig.redirectForLoggedUser
+        ),
+        query,
+        hash
       );
       return {
         value: ERedirect.siteForLoggedUser_pathNotForLoggedUser,
@@ -125,9 +158,13 @@ const checkRedirects = ({
     }
   } else {
     if (isSiteForLoggedUser) {
-      const linkRedirectOnFailure = validLinkWithLocale(
-        linkLocale,
-        translationsConfig.redirectForNotLoggedUser
+      const linkRedirectOnFailure = addQueryAndHashToLink(
+        validLinkWithLocale(
+          linkLocale,
+          translationsConfig.redirectForNotLoggedUser
+        ),
+        query,
+        hash
       );
       return {
         value: ERedirect.siteNotForLoggedUser_pathForLoggedUser,
@@ -145,9 +182,13 @@ const checkRedirects = ({
 const InitializeRedirectsTranslations = ({
   isLoggedUser,
   enable = true,
+  withQuery = true,
+  withHash = true,
 }: {
   isLoggedUser: boolean;
   enable: boolean;
+  withQuery?: boolean;
+  withHash?: boolean;
 }) => {
   const router = useRouter();
 
@@ -175,11 +216,35 @@ const InitializeRedirectsTranslations = ({
       linkWithoutLocale = router.pathname;
     }
 
+    let queryValue = "";
+    if (withQuery) {
+      if (window.location.search.length > 0) {
+        const splitQuery = window.location.search.split("?");
+        const getQueryValue = splitQuery.at(1);
+        if (getQueryValue) {
+          queryValue = getQueryValue;
+        }
+      }
+    }
+
+    let hashValue = "";
+    if (withHash) {
+      if (window.location.hash.length > 0) {
+        const splitHash = window.location.hash.split("#");
+        const getHashValue = splitHash.at(1);
+        if (getHashValue) {
+          hashValue = getHashValue;
+        }
+      }
+    }
+
     const result = checkRedirects({
       isLoggedUser: isLoggedUser,
       locale: undefined,
       path: linkWithoutLocale,
       router: router,
+      query: queryValue,
+      hash: hashValue,
     });
 
     if (router.asPath !== result.path) {
@@ -189,7 +254,14 @@ const InitializeRedirectsTranslations = ({
   }, [isLoggedUser, router.asPath, translationsConfig, enable]);
 };
 
-const validLink = ({isLoggedUser, path, locale, router}: TCheckRedirect) => {
+const validLink = ({
+  isLoggedUser,
+  path,
+  locale,
+  router,
+  query = "",
+  hash = "",
+}: TValidLinks) => {
   const defaultLocaleWithMultirouting: boolean =
     translationsConfig.defaultLocaleWithMultirouting;
   const validLocale = defaultLocaleWithMultirouting
@@ -198,11 +270,28 @@ const validLink = ({isLoggedUser, path, locale, router}: TCheckRedirect) => {
     ? undefined
     : locale;
 
+  let linkWithoutLocale = path;
+  if (!linkWithoutLocale) {
+    if (router.pathname.includes("[locale]")) {
+      const splitPathname = router.pathname.split("/[locale]");
+      const selectedPath = splitPathname.at(1);
+      if (selectedPath) {
+        linkWithoutLocale = selectedPath;
+      } else {
+        linkWithoutLocale = "/";
+      }
+    } else {
+      linkWithoutLocale = router.pathname;
+    }
+  }
+
   const result = checkRedirects({
     isLoggedUser,
-    path,
+    path: linkWithoutLocale,
     locale: validLocale,
     router,
+    query,
+    hash,
   });
 
   return result.path;

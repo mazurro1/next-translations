@@ -57,12 +57,16 @@ export default function App({ Component, pageProps }: AppProps) {
     isLoggedUser: true, // true or false for STATIC PAGES. Attention! if isLoggedUser is undefined then no redirects are performed!
     isLoggedUser: pageProps?.isLoggedUser || false, // for SERVER SIDE RENDERING pages. Attention! if isLoggedUser is undefined then no redirects are performed!
     enable: true, // default is true. Checks if routing can be done on the page. If it's false, it doesn't do routing.
+    withQuery: true, // default is true. Listens for query during redirects
+    withHash: true, // default is true. Listens for hash during redirects
   });
 
   //example
   InitializeRedirectsTranslations({
     isLoggedUser: !!user,
     enable: user !== undefined,
+    withQuery: true,
+    withHash: false,
   });
 
   //checking routes and return valid route
@@ -74,9 +78,11 @@ export default function App({ Component, pageProps }: AppProps) {
     // works in the same way as page redirects. If the user does not have access to a given subpage, he will return a link to the subpage to which he has based on the config
     const result = validLink({
       isLoggedUser: false, // checking if the user is logged in
-      locale: "en", // the locale we want to change to. If undefined, the locale is selected based on the currently used one
-      path: "/user", // path where we want to generate the link
+      locale: "en", // the locale we want to change to. If is undefined, the locale is selected based on the currently used one
+      path: "/user", // path where we want to generate the link. If is undefined, the locale is selected based on the currently used one
       router: router, // need to add router from nextjs
+      query: "", // query to your link.
+      hash: "", // hash to your link
     });
   }, [router, user]);
 
