@@ -75,14 +75,32 @@ export default function App({ Component, pageProps }: AppProps) {
       return;
     }
 
+    let queryValue = "";
+    if (window.location.search.length > 0) {
+      const splitQuery = window.location.search.split("?");
+      const getQueryValue = splitQuery.at(1);
+      if (getQueryValue) {
+        queryValue = getQueryValue;
+      }
+    }
+
+    let hashValue = "";
+    if (window.location.hash.length > 0) {
+      const splitHash = window.location.hash.split("#");
+      const getHashValue = splitHash.at(1);
+      if (getHashValue) {
+        hashValue = getHashValue;
+      }
+    }
+
     // works in the same way as page redirects. If the user does not have access to a given subpage, he will return a link to the subpage to which he has based on the config
     const result = validLink({
       isLoggedUser: false, // checking if the user is logged in
       locale: "en", // the locale we want to change to. If is undefined, the locale is selected based on the currently used one
       path: "/user", // path where we want to generate the link. If is undefined, the locale is selected based on the currently used one
       router: router, // need to add router from nextjs
-      query: "", // query to your link.
-      hash: "", // hash to your link
+      query: queryValue, // query to your link.
+      hash: hashValue, // hash to your link
     });
   }, [router, user]);
 
