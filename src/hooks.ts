@@ -17,56 +17,56 @@ const translationsConfig = {
     translationsConfigUser?.defaultLocaleWithMultirouting,
 };
 
-export type TPageTranslations = {
+export type T_PageTranslations = {
   [key: string]: any;
 };
 
-type TType = "string" | "number" | "array" | "object" | "any";
+type T_Type = "string" | "number" | "array" | "object" | "any";
 
-type TCallback = {
+type T_Callback = {
   textBefore: string | undefined;
   textComponent: string | undefined;
   textAfter: string | undefined;
 };
 
-type TInitializeTranslations = {
-  translations: TPageTranslations;
+type T_InitializeTranslations = {
+  translations: T_PageTranslations;
 };
 
-export type Tt =
+export type T_t =
   | ((slug: string) => undefined)
   | ((slug?: string | undefined) => any | undefined);
 
-export type TtString =
+export type T_tString =
   | ((slug: string) => undefined)
   | ((slug?: string | undefined) => string | undefined);
 
-export type TtNumber =
+export type T_tNumber =
   | ((slug: string) => undefined)
   | ((slug?: string | undefined) => number | undefined);
 
-export type TtArray =
+export type T_tArray =
   | ((slug: string) => undefined)
   | ((slug?: string | undefined) => any[] | undefined);
 
-export type TtObject =
+export type T_tObject =
   | ((slug: string) => undefined)
   | ((slug?: string | undefined) => object | undefined);
 
-export type TtComponent =
-  | ((slug: string, callback: ({}: TCallback) => any) => any)
-  | ((slug: string | undefined, callback: ({}: TCallback) => any) => any);
+export type T_tComponent =
+  | ((slug: string, callback: ({}: T_Callback) => any) => any)
+  | ((slug: string | undefined, callback: ({}: T_Callback) => any) => any);
 
-let pageTranslations: TPageTranslations | null = null;
+let pageTranslations: T_PageTranslations | null = null;
 
 const resolvePath = (object: any, path: string, defaultValue = undefined) =>
   path.split(".").reduce((o, p) => o?.[p] ?? defaultValue, object);
 
-const initializeTranslations = (translations: TInitializeTranslations) => {
+const initializeTranslations = (translations: T_InitializeTranslations) => {
   pageTranslations = translations;
 };
 
-const checkTypesAndReturn = (type: TType, value: any) => {
+const checkTypesAndReturn = (type: T_Type, value: any) => {
   if (type === "string") {
     if (typeof value === "string") {
       return value;
@@ -99,7 +99,7 @@ const checkTypesAndReturn = (type: TType, value: any) => {
 const generateTranslationWithType = (
   slug: string,
   namespace: string,
-  type: TType
+  type: T_Type
 ) => {
   const replacePathFromNamespace = namespace.replace(":", ".");
 
@@ -110,7 +110,7 @@ const generateTranslationWithType = (
     return undefined;
   }
 
-  const translationsNamespace: TPageTranslations | undefined = resolvePath(
+  const translationsNamespace: T_PageTranslations | undefined = resolvePath(
     pageTranslations,
     replacePathFromNamespace,
     undefined
@@ -147,7 +147,7 @@ const generateTranslationWithType = (
 const useTranslation = (namespace: string) => {
   const replacePathFromNamespace = namespace.replace(":", ".");
 
-  const translationsNamespace: TPageTranslations | undefined = resolvePath(
+  const translationsNamespace: T_PageTranslations | undefined = resolvePath(
     pageTranslations,
     replacePathFromNamespace,
     undefined
@@ -173,7 +173,7 @@ const useTranslation = (namespace: string) => {
       tObject: () => {
         return undefined;
       },
-      tComponent: (_slug: string, callback: ({}: TCallback) => any) => {
+      tComponent: (_slug: string, callback: ({}: T_Callback) => any) => {
         return callback({
           textBefore: undefined,
           textComponent: undefined,
@@ -183,29 +183,29 @@ const useTranslation = (namespace: string) => {
     };
   }
 
-  const t: Tt = (slug = ""): any => {
+  const t: T_t = (slug = ""): any => {
     return generateTranslationWithType(slug, namespace, "any");
   };
 
-  const tString: TtString = (slug = ""): string | undefined => {
+  const tString: T_tString = (slug = ""): string | undefined => {
     return generateTranslationWithType(slug, namespace, "string");
   };
 
-  const tNumber: TtNumber = (slug = ""): number | undefined => {
+  const tNumber: T_tNumber = (slug = ""): number | undefined => {
     return generateTranslationWithType(slug, namespace, "number");
   };
 
-  const tArray: TtArray = (slug = ""): any[] | undefined => {
+  const tArray: T_tArray = (slug = ""): any[] | undefined => {
     return generateTranslationWithType(slug, namespace, "array");
   };
 
-  const tObject: TtObject = (slug = ""): object | undefined => {
+  const tObject: T_tObject = (slug = ""): object | undefined => {
     return generateTranslationWithType(slug, namespace, "object");
   };
 
-  const tComponent: TtComponent = (
+  const tComponent: T_tComponent = (
     slug = "",
-    callback: ({}: TCallback) => any
+    callback: ({}: T_Callback) => any
   ) => {
     const generatedText: string | undefined = generateTranslationWithType(
       slug,

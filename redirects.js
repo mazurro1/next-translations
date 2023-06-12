@@ -13,14 +13,14 @@ const translationsConfig = {
     sitedForLoggedAndNotLoggedUser: (translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.sitedForLoggedAndNotLoggedUser) || [],
     defaultLocaleWithMultirouting: translationsConfigUser === null || translationsConfigUser === void 0 ? void 0 : translationsConfigUser.defaultLocaleWithMultirouting,
 };
-var ERedirect;
-(function (ERedirect) {
-    ERedirect["siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser"] = "siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser";
-    ERedirect["siteForLoggedUser_pathForLoggedUser"] = "siteForLoggedUser_pathForLoggedUser";
-    ERedirect["siteForLoggedUser_pathNotForLoggedUser"] = "siteForLoggedUser_pathNotForLoggedUser";
-    ERedirect["siteNotForLoggedUser_pathForLoggedUser"] = "siteNotForLoggedUser_pathForLoggedUser";
-    ERedirect["siteNotForLoggedUser_pathNotForLoggedUser"] = "siteNotForLoggedUser_pathNotForLoggedUser";
-})(ERedirect || (ERedirect = {}));
+var E_Redirect;
+(function (E_Redirect) {
+    E_Redirect["siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser"] = "siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser";
+    E_Redirect["siteForLoggedUser_pathForLoggedUser"] = "siteForLoggedUser_pathForLoggedUser";
+    E_Redirect["siteForLoggedUser_pathNotForLoggedUser"] = "siteForLoggedUser_pathNotForLoggedUser";
+    E_Redirect["siteNotForLoggedUser_pathForLoggedUser"] = "siteNotForLoggedUser_pathForLoggedUser";
+    E_Redirect["siteNotForLoggedUser_pathNotForLoggedUser"] = "siteNotForLoggedUser_pathNotForLoggedUser";
+})(E_Redirect || (E_Redirect = {}));
 const validLinkWithLocale = (locale, path) => {
     if (locale) {
         return `${locale}${path === "/" ? "" : path}`;
@@ -91,21 +91,21 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, query = "", h
     }) !== undefined;
     if (isSiteForLoggedAndNotLoggedUser) {
         return {
-            value: ERedirect.siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser,
+            value: E_Redirect.siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser,
             path: redirectLink,
         };
     }
     if (isLoggedUser) {
         if (isSiteForLoggedUser) {
             return {
-                value: ERedirect.siteForLoggedUser_pathForLoggedUser,
+                value: E_Redirect.siteForLoggedUser_pathForLoggedUser,
                 path: redirectLink,
             };
         }
         else {
             const linkRedirectOnSuccess = addQueryAndHashToLink(validLinkWithLocale(linkLocale, translationsConfig.redirectForLoggedUser), query, hash);
             return {
-                value: ERedirect.siteForLoggedUser_pathNotForLoggedUser,
+                value: E_Redirect.siteForLoggedUser_pathNotForLoggedUser,
                 path: linkRedirectOnSuccess,
             };
         }
@@ -114,13 +114,13 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, query = "", h
         if (isSiteForLoggedUser) {
             const linkRedirectOnFailure = addQueryAndHashToLink(validLinkWithLocale(linkLocale, translationsConfig.redirectForNotLoggedUser), query, hash);
             return {
-                value: ERedirect.siteNotForLoggedUser_pathForLoggedUser,
+                value: E_Redirect.siteNotForLoggedUser_pathForLoggedUser,
                 path: linkRedirectOnFailure,
             };
         }
         else {
             return {
-                value: ERedirect.siteNotForLoggedUser_pathNotForLoggedUser,
+                value: E_Redirect.siteNotForLoggedUser_pathNotForLoggedUser,
                 path: redirectLink,
             };
         }

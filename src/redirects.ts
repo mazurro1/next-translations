@@ -21,7 +21,7 @@ const translationsConfig = {
     translationsConfigUser?.defaultLocaleWithMultirouting,
 };
 
-enum ERedirect {
+enum E_Redirect {
   siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser = "siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser",
   siteForLoggedUser_pathForLoggedUser = "siteForLoggedUser_pathForLoggedUser",
   siteForLoggedUser_pathNotForLoggedUser = "siteForLoggedUser_pathNotForLoggedUser",
@@ -29,19 +29,19 @@ enum ERedirect {
   siteNotForLoggedUser_pathNotForLoggedUser = "siteNotForLoggedUser_pathNotForLoggedUser",
 }
 
-type TCheckRedirect = {
+type T_CheckRedirect = {
   isLoggedUser: boolean;
   path: string;
-  locale: string | undefined;
+  locale?: string;
   router: NextRouter;
   query: string;
   hash: string;
 };
 
-type TValidLinks = {
+type T_ValidLinks = {
   isLoggedUser: boolean;
   path?: string;
-  locale: string | undefined;
+  locale?: string;
   router: NextRouter;
   query?: string;
   hash?: string;
@@ -74,7 +74,7 @@ const checkRedirects = ({
   router,
   query = "",
   hash = "",
-}: TCheckRedirect) => {
+}: T_CheckRedirect) => {
   const selectedLocale =
     locale ?? (router?.query?.locale as string | undefined);
   const defaultLocaleWithMultirouting: boolean =
@@ -131,7 +131,7 @@ const checkRedirects = ({
   if (isSiteForLoggedAndNotLoggedUser) {
     return {
       value:
-        ERedirect.siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser,
+        E_Redirect.siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser,
       path: redirectLink,
     };
   }
@@ -139,7 +139,7 @@ const checkRedirects = ({
   if (isLoggedUser) {
     if (isSiteForLoggedUser) {
       return {
-        value: ERedirect.siteForLoggedUser_pathForLoggedUser,
+        value: E_Redirect.siteForLoggedUser_pathForLoggedUser,
         path: redirectLink,
       };
     } else {
@@ -152,7 +152,7 @@ const checkRedirects = ({
         hash
       );
       return {
-        value: ERedirect.siteForLoggedUser_pathNotForLoggedUser,
+        value: E_Redirect.siteForLoggedUser_pathNotForLoggedUser,
         path: linkRedirectOnSuccess,
       };
     }
@@ -167,12 +167,12 @@ const checkRedirects = ({
         hash
       );
       return {
-        value: ERedirect.siteNotForLoggedUser_pathForLoggedUser,
+        value: E_Redirect.siteNotForLoggedUser_pathForLoggedUser,
         path: linkRedirectOnFailure,
       };
     } else {
       return {
-        value: ERedirect.siteNotForLoggedUser_pathNotForLoggedUser,
+        value: E_Redirect.siteNotForLoggedUser_pathNotForLoggedUser,
         path: redirectLink,
       };
     }
@@ -261,7 +261,7 @@ const validLink = ({
   router,
   query = "",
   hash = "",
-}: TValidLinks) => {
+}: T_ValidLinks) => {
   const defaultLocaleWithMultirouting: boolean =
     translationsConfig.defaultLocaleWithMultirouting;
   const validLocale = defaultLocaleWithMultirouting

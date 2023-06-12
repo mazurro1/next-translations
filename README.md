@@ -348,14 +348,14 @@ tComponent(
 **Avaible types**
 
 ```bash
-// import type {Tt, TtString, TtNumber, TtArray, TtObject, TtComponent} from "next-translations/hooks"
+// import type {T_t, T_tString, T_tNumber, T_tArray, T_tObject, T_tComponent} from "next-translations/hooks"
 
-- Tt
-- TtString
-- TtNumber
-- TtArray
-- TtObject
-- TtComponent
+- T_t
+- T_tString
+- T_tNumber
+- T_tArray
+- T_tObject
+- T_tComponent
 ```
 
 **package.json**

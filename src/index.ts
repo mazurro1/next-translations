@@ -8,9 +8,9 @@ import {fileURLToPath} from "url";
 //@ts-ignore
 import translationsConfigUser from "../../translations.config.js";
 
-import type {TPageTranslations} from "./hooks";
+import type {T_PageTranslations} from "./hooks";
 
-type TTranslationConfig = {
+type T_TranslationConfig = {
   defaultLocale: string;
   locales: string[];
   outputFolderTranslations: string;
@@ -18,7 +18,7 @@ type TTranslationConfig = {
   constNamespaces: string[];
 };
 
-const translationsConfig: TTranslationConfig = {
+const translationsConfig: T_TranslationConfig = {
   defaultLocale: translationsConfigUser?.defaultLocale || "en",
   locales: translationsConfigUser?.locales || ["en"],
   outputFolderTranslations:
@@ -36,7 +36,7 @@ const getTranslationsFromFiles = async (
 ) => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  const translations: TPageTranslations = {};
+  const translations: T_PageTranslations = {};
 
   const uniqueArray = ns.filter((value, index, self) => {
     return self.indexOf(value) === index && !!value;

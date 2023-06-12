@@ -1,8 +1,8 @@
 import { NextRouter } from "next/router";
-type TValidLinks = {
+type T_ValidLinks = {
     isLoggedUser: boolean;
     path?: string;
-    locale: string | undefined;
+    locale?: string;
     router: NextRouter;
     query?: string;
     hash?: string;
@@ -13,5 +13,5 @@ declare const InitializeRedirectsTranslations: ({ isLoggedUser, enable, withQuer
     withQuery?: boolean | undefined;
     withHash?: boolean | undefined;
 }) => void;
-declare const validLink: ({ isLoggedUser, path, locale, router, query, hash, }: TValidLinks) => string;
+declare const validLink: ({ isLoggedUser, path, locale, router, query, hash, }: T_ValidLinks) => string;
 export { InitializeRedirectsTranslations, validLink };
