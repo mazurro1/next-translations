@@ -99,14 +99,17 @@ const checkTypesAndReturn = (type: T_Type, value: any) => {
 const generateTranslationWithType = (
   slug: string,
   namespace: string,
-  type: T_Type
+  type: T_Type,
+  disabledErrors: boolean | undefined
 ) => {
   const replacePathFromNamespace = namespace.replace(":", ".");
 
   if (!pageTranslations) {
-    console.log(
-      `next-translations - No detected translations for this page ${namespace}: ${slug}`
-    );
+    if (!disabledErrors) {
+      console.log(
+        `next-translations - No detected translations for this page ${namespace}: ${slug}`
+      );
+    }
     return undefined;
   }
 
@@ -125,7 +128,9 @@ const generateTranslationWithType = (
   );
 
   if (pathTranslated === undefined) {
-    console.log(`next-translations - Fail translation ${namespace}: ${slug}`);
+    if (!disabledErrors) {
+      console.log(`next-translations - Fail translation ${namespace}: ${slug}`);
+    }
     return undefined;
   }
 
@@ -134,9 +139,11 @@ const generateTranslationWithType = (
     if (validPathTranslted !== undefined) {
       return validPathTranslted;
     } else {
-      console.log(
-        `next-translations - Fail type in translation ${namespace}: ${slug}`
-      );
+      if (!disabledErrors) {
+        console.log(
+          `next-translations - Fail type in translation ${namespace}: ${slug}`
+        );
+      }
       return undefined;
     }
   } else {
@@ -144,7 +151,10 @@ const generateTranslationWithType = (
   }
 };
 
-const useTranslation = (namespace: string = "") => {
+const useTranslation = (
+  namespace: string = "",
+  disabledErrors: boolean | undefined = false
+) => {
   const replacePathFromNamespace = namespace.replace(":", ".");
 
   const translationsNamespace: T_PageTranslations | undefined = resolvePath(
@@ -154,9 +164,11 @@ const useTranslation = (namespace: string = "") => {
   );
 
   if (!translationsNamespace) {
-    console.log(
-      `next-translations - fail load namespace: ${namespace}. Probably that the given namespace is missing from the folder in your namespaces or it is spelled incorrectly. Another reason may be the translations have been cached and need to refresh the page!`
-    );
+    if (!disabledErrors) {
+      console.log(
+        `next-translations - fail load namespace: ${namespace}. Probably that the given namespace is missing from the folder in your namespaces or it is spelled incorrectly. Another reason may be the translations have been cached and need to refresh the page!`
+      );
+    }
     return {
       pageTranslations,
       t: () => {
@@ -185,23 +197,43 @@ const useTranslation = (namespace: string = "") => {
   }
 
   const t: T_t = (slug = ""): any => {
-    return generateTranslationWithType(slug, namespace, "any");
+    return generateTranslationWithType(slug, namespace, "any", disabledErrors);
   };
 
   const tString: T_tString = (slug = ""): string | undefined => {
-    return generateTranslationWithType(slug, namespace, "string");
+    return generateTranslationWithType(
+      slug,
+      namespace,
+      "string",
+      disabledErrors
+    );
   };
 
   const tNumber: T_tNumber = (slug = ""): number | undefined => {
-    return generateTranslationWithType(slug, namespace, "number");
+    return generateTranslationWithType(
+      slug,
+      namespace,
+      "number",
+      disabledErrors
+    );
   };
 
   const tArray: T_tArray = (slug = ""): any[] | undefined => {
-    return generateTranslationWithType(slug, namespace, "array");
+    return generateTranslationWithType(
+      slug,
+      namespace,
+      "array",
+      disabledErrors
+    );
   };
 
   const tObject: T_tObject = (slug = ""): object | undefined => {
-    return generateTranslationWithType(slug, namespace, "object");
+    return generateTranslationWithType(
+      slug,
+      namespace,
+      "object",
+      disabledErrors
+    );
   };
 
   const tComponent: T_tComponent = (
@@ -211,7 +243,8 @@ const useTranslation = (namespace: string = "") => {
     const generatedText: string | undefined = generateTranslationWithType(
       slug,
       namespace,
-      "string"
+      "string",
+      disabledErrors
     );
 
     if (!generatedText) {

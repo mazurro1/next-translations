@@ -278,6 +278,7 @@ import { GetServerSideProps } from "next";
 
 function Home() {
   const { t, pageTranslations } = useTranslation("common"); // enter the given namespace that you use in the given section
+  const { t, pageTranslations } = useTranslation("common", true); // translations without log errors
   const { t, pageTranslations } = useTranslation("common:section"); // if you want you can also refer to namespace, along with nested elements - 1 example
   const { t, pageTranslations } = useTranslation("common.section"); // if you want you can also refer to namespace, along with nested elements - 2 example
 
