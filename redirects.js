@@ -44,7 +44,7 @@ const addQueryAndHashToLink = (link, query, hash) => {
     }
 };
 const checkRedirects = ({ isLoggedUser, path = "", locale, router, query = "", hash = "", }) => {
-    var _a;
+    var _a, _b, _c;
     const selectedLocale = locale !== null && locale !== void 0 ? locale : (_a = router === null || router === void 0 ? void 0 : router.query) === null || _a === void 0 ? void 0 : _a.locale;
     const defaultLocaleWithMultirouting = translationsConfig.defaultLocaleWithMultirouting;
     const linkLocale = selectedLocale
@@ -53,7 +53,7 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, query = "", h
             ? `/${translationsConfig.defaultLocale}`
             : "";
     const redirectLink = addQueryAndHashToLink(validLinkWithLocale(linkLocale, path), query, hash);
-    const isSiteForLoggedUser = translationsConfig.sitesForLoggedUser.find((itemRoute) => {
+    const isSiteForLoggedUser = ((_b = translationsConfig.sitesForLoggedUser) === null || _b === void 0 ? void 0 : _b.find((itemRoute) => {
         if (!!linkLocale) {
             if (validLinkWithLocale(linkLocale, itemRoute) === redirectLink) {
                 return true;
@@ -70,8 +70,8 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, query = "", h
                 return false;
             }
         }
-    }) !== undefined;
-    const isSiteForLoggedAndNotLoggedUser = translationsConfig.sitedForLoggedAndNotLoggedUser.find((itemRoute) => {
+    })) !== undefined;
+    const isSiteForLoggedAndNotLoggedUser = ((_c = translationsConfig.sitedForLoggedAndNotLoggedUser) === null || _c === void 0 ? void 0 : _c.find((itemRoute) => {
         if (!!linkLocale) {
             if (validLinkWithLocale(linkLocale, itemRoute) === redirectLink) {
                 return true;
@@ -88,7 +88,7 @@ const checkRedirects = ({ isLoggedUser, path = "", locale, router, query = "", h
                 return false;
             }
         }
-    }) !== undefined;
+    })) !== undefined;
     if (isSiteForLoggedAndNotLoggedUser) {
         return {
             value: E_Redirect.siteForLoggedAndNotLoggedUser_pathForLoggedAndNotLoggedUser,

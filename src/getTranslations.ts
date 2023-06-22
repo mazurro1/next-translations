@@ -39,8 +39,8 @@ export const downloadLanguages = async () => {
   const __dirname = path.dirname(__filename);
 
   try {
-    for (const lang of translationsConfig.locales) {
-      for (const namespace of translationsConfig.namespacesToFetch) {
+    for (const lang of translationsConfig.locales ?? []) {
+      for (const namespace of translationsConfig.namespacesToFetch ?? []) {
         const data = await fetchLanguages(lang, namespace);
         if (data) {
           const folderPath = `../..${translationsConfig.outputFolderTranslations}/${lang}/${namespace}.json`;

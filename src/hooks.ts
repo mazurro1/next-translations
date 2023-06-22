@@ -144,7 +144,7 @@ const generateTranslationWithType = (
   }
 };
 
-const useTranslation = (namespace: string) => {
+const useTranslation = (namespace: string = "") => {
   const replacePathFromNamespace = namespace.replace(":", ".");
 
   const translationsNamespace: T_PageTranslations | undefined = resolvePath(
@@ -158,6 +158,7 @@ const useTranslation = (namespace: string) => {
       `next-translations - fail load namespace: ${namespace}. Probably that the given namespace is missing from the folder in your namespaces or it is spelled incorrectly. Another reason may be the translations have been cached and need to refresh the page!`
     );
     return {
+      pageTranslations,
       t: () => {
         return undefined;
       },
@@ -228,7 +229,7 @@ const useTranslation = (namespace: string) => {
 
     const generatedTextArray = generatedText.split(" ");
 
-    generatedTextArray.forEach((itemText, indexText) => {
+    generatedTextArray?.forEach((itemText, indexText) => {
       const isStartComponent =
         itemText === "<" + translationsConfig.componentNameToReplaced + ">";
       if (isStartComponent) {
@@ -253,7 +254,7 @@ const useTranslation = (namespace: string) => {
       }
     });
 
-    generatedTextArray.forEach((itemText, indexText) => {
+    generatedTextArray?.forEach((itemText, indexText) => {
       if (
         componentOnlyIndex === -1 &&
         componentStartIndex >= 0 &&

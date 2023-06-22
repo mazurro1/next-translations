@@ -93,7 +93,7 @@ const checkRedirects = ({
   );
 
   const isSiteForLoggedUser =
-    translationsConfig.sitesForLoggedUser.find((itemRoute: string) => {
+    translationsConfig.sitesForLoggedUser?.find((itemRoute: string) => {
       if (!!linkLocale) {
         if (validLinkWithLocale(linkLocale, itemRoute) === redirectLink) {
           return true;
@@ -110,7 +110,7 @@ const checkRedirects = ({
     }) !== undefined;
 
   const isSiteForLoggedAndNotLoggedUser =
-    translationsConfig.sitedForLoggedAndNotLoggedUser.find(
+    translationsConfig.sitedForLoggedAndNotLoggedUser?.find(
       (itemRoute: string) => {
         if (!!linkLocale) {
           if (validLinkWithLocale(linkLocale, itemRoute) === redirectLink) {

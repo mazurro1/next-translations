@@ -38,9 +38,10 @@ const getTranslationsFromFiles = async (
   const __dirname = path.dirname(__filename);
   const translations: T_PageTranslations = {};
 
-  const uniqueArray = ns.filter((value, index, self) => {
-    return self.indexOf(value) === index && !!value;
-  });
+  const uniqueArray =
+    ns?.filter((value, index, self) => {
+      return self.indexOf(value) === index && !!value;
+    }) ?? [];
 
   try {
     for (const namespace of uniqueArray) {
@@ -64,20 +65,22 @@ const getTranslationsFromFiles = async (
 };
 
 async function getTranslationsProps(ctx: any, ns: string[] = []) {
-  let locale: string = translationsConfig.defaultLocale;
+  let locale: string = translationsConfig?.defaultLocale;
 
   if (ctx?.params?.locale) {
-    const isInLocales = translationsConfig.locales.some(
-      (itemLocale) => itemLocale === ctx.params.locale
+    const isInLocales = translationsConfig?.locales?.some(
+      (itemLocale) => itemLocale === ctx?.params?.locale
     );
 
-    locale = isInLocales ? ctx.params.locale : translationsConfig.defaultLocale;
+    locale = isInLocales
+      ? ctx?.params?.locale
+      : translationsConfig?.defaultLocale;
   }
-  const defaultNamespacesToUseInAllPages = translationsConfig.constNamespaces;
+  const defaultNamespacesToUseInAllPages = translationsConfig?.constNamespaces;
 
   ctx.locale = locale;
-  ctx.locales = translationsConfig.locales;
-  ctx.defaultLocale = translationsConfig.defaultLocale;
+  ctx.locales = translationsConfig?.locales;
+  ctx.defaultLocale = translationsConfig?.defaultLocale;
 
   const props = {
     ...(await getTranslationsFromFiles(locale, [
@@ -91,14 +94,14 @@ async function getTranslationsProps(ctx: any, ns: string[] = []) {
 
 const getPaths = () => {
   return translationsConfig.locales
-    .filter((item) => {
-      if (!translationsConfig.defaultLocaleWithMultirouting) {
-        return item !== translationsConfig.defaultLocale;
+    ?.filter((item) => {
+      if (!translationsConfig?.defaultLocaleWithMultirouting) {
+        return item !== translationsConfig?.defaultLocale;
       } else {
         return true;
       }
     })
-    .map((lng) => ({
+    ?.map((lng) => ({
       params: {
         locale: lng,
       },
