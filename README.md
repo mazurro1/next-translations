@@ -28,6 +28,12 @@ npm i next-translations
 
 ## configuration
 
+**Attention!** To avoid a translation error when building a page, add getTranslationsProps to each page! If you don't have these pages, you may get messages about no translation!
+
+- /404
+- /500
+- /offline
+
 **example translations in /public/locales/en/common.json**
 
 ```bash
