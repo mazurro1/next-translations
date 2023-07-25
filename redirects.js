@@ -45,12 +45,18 @@ const addQueryAndHashToLink = (link, query, hash) => {
 };
 const checkRedirects = ({ isLoggedUser, path = "", locale, router, query = "", hash = "", }) => {
     var _a, _b, _c;
-    const selectedLocale = locale !== null && locale !== void 0 ? locale : (_a = router === null || router === void 0 ? void 0 : router.query) === null || _a === void 0 ? void 0 : _a.locale;
     const defaultLocaleWithMultirouting = translationsConfig.defaultLocaleWithMultirouting;
+    const defaultLocale = translationsConfig.defaultLocale;
+    let selectedLocale = locale !== null && locale !== void 0 ? locale : (_a = router === null || router === void 0 ? void 0 : router.query) === null || _a === void 0 ? void 0 : _a.locale;
+    if (!defaultLocaleWithMultirouting) {
+        if (defaultLocale === locale) {
+            selectedLocale = undefined;
+        }
+    }
     const linkLocale = selectedLocale
         ? `/${selectedLocale}`
         : defaultLocaleWithMultirouting
-            ? `/${translationsConfig.defaultLocale}`
+            ? `/${defaultLocale}`
             : "";
     const redirectLink = addQueryAndHashToLink(validLinkWithLocale(linkLocale, path), query, hash);
     const isSiteForLoggedUser = ((_b = translationsConfig.sitesForLoggedUser) === null || _b === void 0 ? void 0 : _b.find((itemRoute) => {
@@ -185,12 +191,6 @@ const InitializeRedirectsTranslations = ({ isLoggedUser, enable = true, withQuer
     }, [isLoggedUser, router.asPath, translationsConfig, enable]);
 };
 const validLink = ({ isLoggedUser, path, locale, router, query = "", hash = "", }) => {
-    const defaultLocaleWithMultirouting = translationsConfig.defaultLocaleWithMultirouting;
-    const validLocale = defaultLocaleWithMultirouting
-        ? locale
-        : translationsConfig.defaultLocale === locale
-            ? undefined
-            : locale;
     let linkWithoutLocale = path;
     if (!linkWithoutLocale) {
         if (router.pathname.includes("[locale]")) {
@@ -210,7 +210,7 @@ const validLink = ({ isLoggedUser, path, locale, router, query = "", hash = "", 
     const result = checkRedirects({
         isLoggedUser,
         path: linkWithoutLocale,
-        locale: validLocale,
+        locale: locale,
         router,
         query,
         hash,

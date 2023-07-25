@@ -75,15 +75,21 @@ const checkRedirects = ({
   query = "",
   hash = "",
 }: T_CheckRedirect) => {
-  const selectedLocale =
-    locale ?? (router?.query?.locale as string | undefined);
   const defaultLocaleWithMultirouting: boolean =
     translationsConfig.defaultLocaleWithMultirouting;
+  const defaultLocale = translationsConfig.defaultLocale;
+
+  let selectedLocale = locale ?? (router?.query?.locale as string | undefined);
+  if (!defaultLocaleWithMultirouting) {
+    if (defaultLocale === locale) {
+      selectedLocale = undefined;
+    }
+  }
 
   const linkLocale = selectedLocale
     ? `/${selectedLocale}`
     : defaultLocaleWithMultirouting
-    ? `/${translationsConfig.defaultLocale}`
+    ? `/${defaultLocale}`
     : "";
 
   const redirectLink = addQueryAndHashToLink(
@@ -262,14 +268,6 @@ const validLink = ({
   query = "",
   hash = "",
 }: T_ValidLinks) => {
-  const defaultLocaleWithMultirouting: boolean =
-    translationsConfig.defaultLocaleWithMultirouting;
-  const validLocale = defaultLocaleWithMultirouting
-    ? locale
-    : translationsConfig.defaultLocale === locale
-    ? undefined
-    : locale;
-
   let linkWithoutLocale = path;
   if (!linkWithoutLocale) {
     if (router.pathname.includes("[locale]")) {
@@ -288,7 +286,7 @@ const validLink = ({
   const result = checkRedirects({
     isLoggedUser,
     path: linkWithoutLocale,
-    locale: validLocale,
+    locale: locale,
     router,
     query,
     hash,
