@@ -20,7 +20,7 @@ const translationsConfig = {
 
 const fetchLanguages = async (language: string, namespace: string) => {
   const linkToFetch = translationsConfig.linkFetchTranslations(
-    process.env?.FLEX_PUBLIC_APP_ENV,
+    process.env?.NEXT_PUBLIC_NEXT_TRANSLATIONS_APP_ENV,
     language,
     namespace
   );
