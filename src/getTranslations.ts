@@ -50,6 +50,9 @@ export const downloadLanguages = async () => {
           const data = await fetchLanguages(lang, namespace);
           await fse.outputFile(pathToFile, JSON.stringify(data ?? {}));
         } catch (err) {
+          console.log(
+            `Fail on downloading translations in lang: ${lang}, namespace: ${namespace}`
+          );
           await fse.outputFile(pathToFile, JSON.stringify({}));
         }
       }
