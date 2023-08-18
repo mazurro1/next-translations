@@ -25,6 +25,9 @@ const fetchLanguages = async (language: string, namespace: string) => {
     namespace
   );
   const result = await fetch(linkToFetch);
+  if (!result) {
+    return {};
+  }
   return result.json();
 };
 
@@ -41,12 +44,13 @@ export const downloadLanguages = async () => {
   try {
     for (const lang of translationsConfig.locales ?? []) {
       for (const namespace of translationsConfig.namespacesToFetch ?? []) {
-        const data = await fetchLanguages(lang, namespace);
-        if (data) {
-          const folderPath = `../..${translationsConfig.outputFolderTranslations}/${lang}/${namespace}.json`;
-          const pathToFile = path.resolve(__dirname, folderPath);
-
-          await fse.outputFile(pathToFile, JSON.stringify(data));
+        const folderPath = `../..${translationsConfig.outputFolderTranslations}/${lang}/${namespace}.json`;
+        const pathToFile = path.resolve(__dirname, folderPath);
+        try {
+          const data = await fetchLanguages(lang, namespace);
+          await fse.outputFile(pathToFile, JSON.stringify(data ?? {}));
+        } catch (err) {
+          await fse.outputFile(pathToFile, JSON.stringify({}));
         }
       }
     }
