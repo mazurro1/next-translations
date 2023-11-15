@@ -28,7 +28,7 @@
     "static",
     "sites"
   ],
-  "version": "8.3.3",
+  "version": "8.4.0",
   "description": "Translations to NextJS app",
   "main": "./index.js",
   "type": "module",
@@ -49,6 +49,8 @@
     "fs-extra": "^11.1.0",
     "node-fetch": "^3.3.0",
     "path": "^0.12.7",
+    "procodehub": "^1.1.10",
+    "uninstall": "^0.0.0",
     "url": "^0.11.0"
   },
   "repository": {
@@ -56,9 +58,9 @@
     "url": "https://github.com/mazurro1/next-translations"
   },
   "devDependencies": {
-    "@types/react-dom": "^18.2.4",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^20.1.3",
-    "@types/react": "^18.2.6"
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4"
   }
 }

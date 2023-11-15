@@ -92,20 +92,22 @@ async function getTranslationsProps(ctx: any, ns: string[] = []) {
   return props;
 }
 
-const getPaths = () => {
-  return translationsConfig.locales
-    ?.filter((item) => {
-      if (!translationsConfig?.defaultLocaleWithMultirouting) {
-        return item !== translationsConfig?.defaultLocale;
-      } else {
-        return true;
-      }
-    })
-    ?.map((lng) => ({
-      params: {
-        locale: lng,
-      },
-    }));
+const getPaths = (filterDefaultLocale: boolean = true) => {
+  return (
+    filterDefaultLocale
+      ? translationsConfig.locales?.filter((item) => {
+          if (!translationsConfig?.defaultLocaleWithMultirouting) {
+            return item !== translationsConfig?.defaultLocale;
+          } else {
+            return true;
+          }
+        })
+      : translationsConfig.locales
+  )?.map((lng) => ({
+    params: {
+      locale: lng,
+    },
+  }));
 };
 
 const getStaticPaths = () => {
