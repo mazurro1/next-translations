@@ -169,7 +169,7 @@ export default Home;
 `Note: if you don't have defaultLocaleWithMultirouting defined, then you MUST keep content in /pages/[locale]/yourPath.tsx, otherwise you will only have the language that was set as defaultLocale!`
 
 ```bash
-import { getTranslationsProps } from "next-translations";
+import { getTranslationsPropsServer } from "next-translations/server";
 import { useTranslation } from "next-translations/hooks";
 import { GetServerSideProps } from "next";
 
@@ -192,7 +192,7 @@ function Home() {
 
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all translations in string[] that you use on this subpage
+  const translatesProps = await getTranslationsPropsServer(ctx, ["common"]); // add here all translations in string[] that you use on this subpage
 
   // you have access to:
   // ctx.locale - current locale
@@ -272,7 +272,7 @@ export default Home;
 `Attention! You manage the site's languages via slug! eg: /en/home - page with en language, /pl/home - page with pl language`
 
 ```bash
-import { getTranslationsProps } from "next-translations";
+import { getTranslationsPropsServer } from "next-translations/server";
 import { useTranslation } from "next-translations/hooks";
 import { GetServerSideProps } from "next";
 
@@ -295,7 +295,7 @@ function Home() {
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  const translatesProps = await getTranslationsProps(ctx, ["common"]); // add here all translations in string[] that you use on this subpage
+  const translatesProps = await getTranslationsPropsServer(ctx, ["common"]); // add here all translations in string[] that you use on this subpage
 
   // you have access to:
   // ctx.locale - current locale

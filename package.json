@@ -28,7 +28,7 @@
     "static",
     "sites"
   ],
-  "version": "8.4.0",
+  "version": "8.6.0",
   "description": "Translations to NextJS app",
   "main": "./index.js",
   "type": "module",
@@ -38,11 +38,6 @@
     "build": "tsc -d --outDir ./ && tsc --outDir ./"
   },
   "license": "MIT",
-  "peerDependencies": {
-    "next": "^13.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
   "dependencies": {
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
